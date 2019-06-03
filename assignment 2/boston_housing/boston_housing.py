@@ -1,12 +1,38 @@
+#%%
 from keras import models
 from keras import layers
 import numpy as np
 from keras.datasets import boston_housing
 import matplotlib.pyplot as plt
-import os
-from pathlib import Path
-# a relative import
-common_tools = (lambda p,i={}:exec(Path(os.path.join(os.path.dirname(__file__),p)).read_text(),{},i)or i)('../../common_tools.py')
+
+# A helper for cross validation
+def cross_validate(data, labels, train_and_test_function, number_of_folds=6):
+    print("\n\nStarting cross validation")
+    import numpy as np
+    """
+    data
+        needs to have its first dimension (the len()) be the number of data points
+    train_and_test_function
+        needs to have 4 arguments, train_data, train_labels, test_data, and test_labels
+        it should return accuracy information as output
+    """
+    # check number of folds
+    if (len(data) % number_of_folds):
+        raise "The data needs to be divisible by the number of folds"
+    
+    results = []
+    batch_size = int(len(data) / number_of_folds)
+    for batch_number in range(number_of_folds):
+        print("\nOn fold:",batch_number+1)
+        start_index = batch_number * batch_size
+        end_index = (batch_number + 1) * batch_size
+        test_data = data[start_index:end_index]
+        test_labels = labels[start_index:end_index]
+        train_data   = np.concatenate((  data[0:start_index],   data[end_index:len(data)-1]))
+        train_labels = np.concatenate((labels[0:start_index], labels[end_index:len(data)-1]))
+        results.append(train_and_test_function(train_data, train_labels, test_data, test_labels))
+    return results
+
 
 #%%
 # Get data
@@ -28,17 +54,18 @@ def build_model():
     return model
 
 num_epochs = 500
-def train_and_evaluate_function(train_data, train_labels, test_data, test_labels):
+def train_and_evaluate_function(train_data, train_labels, eval_data, eval_labels):
     global num_epochs
     model = build_model()
-    history = model.fit(train_data, train_labels, epochs=num_epochs, batch_size=1)
+    history = model.fit(train_data, train_labels, validation_data=(eval_data, eval_labels), epochs=num_epochs, batch_size=1)
     val_mse, val_mae = model.evaluate(test_data, test_labels)
     return val_mae, history
 
 #%%
 # Run cross validation
 #%%
-all_results = common_tools["cross_validate"](train_data, train_targets, train_and_evaluate_function, number_of_folds=4)
+print("starting cross_validation")
+all_results = cross_validate(train_data, train_targets, train_and_evaluate_function, number_of_folds=4)
 
 
 #%%
