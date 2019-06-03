@@ -4,12 +4,12 @@ def vectorize_sequences(sequences, dimension=10000):
           results[i, sequence] = 1.
     return results
 
-def cross_validate(data, labels, train_and_test_function, number_of_folds=6):
+def cross_validate(data, labels, train_and_validate_function, number_of_folds=6):
     import numpy as np
     """
     data
         needs to have its first dimension (the len()) be the number of data points
-    train_and_test_function
+    train_and_validate_function
         needs to have 4 arguments, train_data, train_labels, test_data, and test_labels
         it should return accuracy information as output
     """
@@ -27,5 +27,5 @@ def cross_validate(data, labels, train_and_test_function, number_of_folds=6):
         test_labels = labels[start_index:end_index]
         train_data   = np.concatenate((  data[0:start_index],   data[end_index:len(data)-1]))
         train_labels = np.concatenate((labels[0:start_index], labels[end_index:len(data)-1]))
-        results.append(train_and_test_function(train_data, train_labels, test_data, test_labels))
+        results.append(train_and_validate_function(train_data, train_labels, test_data, test_labels))
     return results
