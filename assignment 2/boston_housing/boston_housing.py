@@ -58,7 +58,7 @@ def train_and_evaluate_function(train_data, train_labels, eval_data, eval_labels
     global num_epochs
     model = build_model()
     history = model.fit(train_data, train_labels, validation_data=(eval_data, eval_labels), epochs=num_epochs, batch_size=1)
-    val_mse, val_mae = model.evaluate(test_data, test_labels)
+    val_mse, val_mae = model.evaluate(eval_data, eval_labels)
     return val_mae, history
 
 #%%
@@ -107,3 +107,5 @@ model.fit(train_data, train_targets, epochs=80, batch_size=16, verbose=0)
 test_mse_score, test_mae_score = model.evaluate(test_data, test_targets)
 print('test_mse_score = ', test_mse_score)
 print('test_mae_score = ', test_mae_score)
+
+#%%
