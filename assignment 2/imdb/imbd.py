@@ -30,12 +30,11 @@ model.compile(optimizer='rmsprop', loss='binary_crossentropy', metrics=['acc'])
 #%%
 # Train and test
 #%%
-x_val = x_train[:10000]
+x_val = x_train[:10000] # set aside the first 10000
 y_val = y_train[:10000]
 partial_x_train = x_train[10000:]
 partial_y_train = y_train[10000:]
 history = model.fit(partial_x_train, partial_y_train, epochs=20, batch_size=512, validation_data=(x_val, y_val))
-results = model.evaluate(x_test, y_test)
 
 #%%
 # Display Loss Graph
@@ -66,5 +65,17 @@ plt.xlabel('Epochs')
 plt.ylabel('Loss')
 plt.legend()
 plt.show()
+
+#%%
+# Retrain with the optimal number of epochs
+#%%
+model = models.Sequential()
+model.add(layers.Dense(16, activation='relu', input_shape=(10000,)))
+model.add(layers.Dense(16, activation='relu'))
+model.add(layers.Dense(1, activation='sigmoid'))
+model.compile(optimizer='rmsprop', loss='binary_crossentropy', metrics=['accuracy'])
+model.fit(x_train, y_train, epochs=4, batch_size=512)
+results = model.evaluate(x_test, y_test)
+print('results = ', results)
 
 #%%
