@@ -3,11 +3,7 @@ from keras import models
 from keras import layers
 from keras.utils import to_categorical
 import numpy as np
-from sklearn.model_selection import StratifiedKFold
-import os
-from pathlib import Path
-# a relative import
-common_tools = (lambda p,i={}:exec(Path(os.path.join(os.path.dirname(__file__),p)).read_text(),{},i)or i)('../common_tools.py')
+from common_tools import cross_validate
 
 # 
 # get & reshape data
@@ -40,6 +36,6 @@ def train_and_test_function(train_data, train_labels, test_data, test_labels):
     return network.evaluate(test_data, test_labels)
 
 
-results = common_tools["cross_validate"](data, labels, train_and_test_function, number_of_folds=7)
+results = cross_validate(data, labels, train_and_test_function, number_of_folds=7)
 for each in results:
     print(each)

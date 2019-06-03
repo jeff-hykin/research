@@ -4,35 +4,7 @@ from keras import layers
 import numpy as np
 from keras.datasets import boston_housing
 import matplotlib.pyplot as plt
-
-# A helper for cross validation
-def cross_validate(data, labels, train_and_test_function, number_of_folds=6):
-    print("\n\nStarting cross validation")
-    import numpy as np
-    """
-    data
-        needs to have its first dimension (the len()) be the number of data points
-    train_and_test_function
-        needs to have 4 arguments, train_data, train_labels, test_data, and test_labels
-        it should return accuracy information as output
-    """
-    # check number of folds
-    if (len(data) % number_of_folds):
-        raise "The data needs to be divisible by the number of folds"
-    
-    results = []
-    batch_size = int(len(data) / number_of_folds)
-    for batch_number in range(number_of_folds):
-        print("\nOn fold:",batch_number+1)
-        start_index = batch_number * batch_size
-        end_index = (batch_number + 1) * batch_size
-        test_data = data[start_index:end_index]
-        test_labels = labels[start_index:end_index]
-        train_data   = np.concatenate((  data[0:start_index],   data[end_index:len(data)-1]))
-        train_labels = np.concatenate((labels[0:start_index], labels[end_index:len(data)-1]))
-        results.append(train_and_test_function(train_data, train_labels, test_data, test_labels))
-    return results
-
+from common_tools import cross_validate
 
 #%%
 # Get data
