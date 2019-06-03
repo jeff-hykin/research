@@ -4,6 +4,10 @@ from keras import layers
 import numpy as np
 from keras.utils.np_utils import to_categorical
 from keras.datasets import reuters
+import os
+from pathlib import Path
+# a relative import
+common_tools = (lambda p,i={}:exec(Path(os.path.join(os.path.dirname(__file__),p)).read_text(),{},i)or i)('../../common_tools.py')
 
 #%% 
 # get & reshape data
@@ -13,13 +17,8 @@ from keras.datasets import reuters
 one_hot_train_labels = to_categorical(train_labels)
 one_hot_test_labels = to_categorical(test_labels)
 # vectorize the data as well
-def vectorize_sequences(sequences, dimension=10000):
-    results = np.zeros((len(sequences), dimension))
-    for i, sequence in enumerate(sequences):
-        results[i, sequence] = 1.
-    return results
-x_train = vectorize_sequences(train_data)
-x_test = vectorize_sequences(test_data)
+x_train = common_tools["vectorize_sequences"](train_data)
+x_test = common_tools["vectorize_sequences"](test_data)
 
 
 #%%

@@ -3,19 +3,18 @@ from keras import models
 from keras import layers
 from keras.datasets import imdb
 import numpy as np
+import os
+from pathlib import Path
+# a relative import
+common_tools = (lambda p,i={}:exec(Path(os.path.join(os.path.dirname(__file__),p)).read_text(),{},i)or i)('../../common_tools.py')
 
 #%% 
 # get & reshape data
 #%%
 (train_data, train_labels), (test_data, test_labels) = imdb.load_data(num_words=10000)
-def vectorize_sequences(sequences, dimension=10000):
-    results = np.zeros((len(sequences), dimension))
-    for i, sequence in enumerate(sequences):
-          results[i, sequence] = 1.
-    return results
-x_train = vectorize_sequences(train_data)
+x_train = common_tools["vectorize_sequences"](train_data)
 y_train = np.asarray(train_labels).astype('float32')
-x_test = vectorize_sequences(test_data)
+x_test = common_tools["vectorize_sequences"](test_data)
 y_test = np.asarray(test_labels).astype('float32')
 
 #%% 
