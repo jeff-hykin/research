@@ -1,1 +1,6 @@
+cross validation time ~= 20 minutes
 all_scores =  [2.230799396439354, 2.9957959793581823, 2.98504103764449, 2.5125933348542393]
+
+final scores: 
+test_mse_score =  19.229079003427543
+test_mae_score =  2.808919196035348
