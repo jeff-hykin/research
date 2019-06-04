@@ -29,3 +29,45 @@ def cross_validate(data, labels, train_and_validate_function, number_of_folds=6)
         train_labels = np.concatenate((labels[0:start_index], labels[end_index:len(data)-1]))
         results.append(train_and_validate_function(train_data, train_labels, test_data, test_labels))
     return results
+
+def download_file_from_google_drive(id, destination):
+    import requests
+    def get_confirm_token(response):
+        for key, value in response.cookies.items():
+            if key.startswith('download_warning'):
+                return value
+        return None
+    def save_response_content(response, destination):
+        CHUNK_SIZE = 32768
+
+        with open(destination, "wb") as f:
+            for chunk in response.iter_content(CHUNK_SIZE):
+                if chunk: # filter out keep-alive new chunks
+                    f.write(chunk)
+    URL = "https://docs.google.com/uc?export=download"
+
+    session = requests.Session()
+
+    response = session.get(URL, params = { 'id' : id }, stream = True)
+    token = get_confirm_token(response)
+
+    if token:
+        params = { 'id' : id, 'confirm' : token }
+        response = session.get(URL, params = params, stream = True)
+
+    save_response_content(response, destination)    
+
+
+def google_words():
+    import pickle
+    import os
+    print("loading the google words. This will take a bit")
+    model_path = "setup/google_word2vec.nosync.model"
+    max_bytes = 2**31 - 1
+    bytes_in = bytearray(0)
+    input_size = os.path.getsize(model_path)
+    with open(model_path, 'rb') as f_in:
+        for _ in range(0, input_size, max_bytes):
+            bytes_in += f_in.read(max_bytes)
+
+    return pickle.loads(bytes_in)
