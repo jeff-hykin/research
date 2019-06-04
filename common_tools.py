@@ -1,4 +1,5 @@
 def vectorize_sequences(sequences, dimension=10000):
+    import numpy as np
     results = np.zeros((len(sequences), dimension))
     for i, sequence in enumerate(sequences):
           results[i, sequence] = 1.
