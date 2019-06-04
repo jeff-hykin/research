@@ -3,25 +3,12 @@ from keras import models
 from keras import layers
 from keras.datasets import imdb
 import numpy as np
-from common_tools import vectorize_sequences, google_words
-
-#%% 
-# get & reshape data
-#%%
-(train_data, train_labels), (test_data, test_labels) = imdb.load_data(num_words=10000)
-# x_train = vectorize_sequences(train_data)
-# y_train = np.asarray(train_labels).astype('float32')
-# x_test = vectorize_sequences(test_data)
-# y_test = np.asarray(test_labels).astype('float32')
-
-wv = google_words()
-word_as_vec = wv['hello']
-word_vec_size = len(word_as_vec)
+from common_tools import vectorize_sequences, google_words, large_pickle_save, large_pickle_load
 
 #%%
-# 
-# Convert reviews into blocks of words
-#
+# Tools for reshaping data 
+#%%
+# check and see if the data has already been processed
 word_index = imdb.get_word_index()
 reverse_word_index = dict([(value, key) for (key, value) in word_index.items()] )
 del word_index
@@ -45,23 +32,20 @@ def convert_to_fragments(train_data, train_labels, block_size=32):
     new_reviews = []
     new_labels = []
     for each_index, each_review in enumerate(train_data):
-        size = len(each)
         words_copy = []
         # filter out words that are not known
         for each_word_index in each_review:
             if index_to_word(each_word_index) in wv:
                 words_copy.append(each_word_index)
-        
-        if size >= block_size:
-            # if theres enough space for at least 1 more block
-            while len(words_copy) >= block_size:
-                # copy off the block
-                block = words_copy[:block_size]
-                # create a review fragment
-                new_reviews.append(block)
-                new_labels.append(train_labels[each_index])
-                # remove half a block from the review
-                words_copy = words_copy[int(block_size / 2):]
+        # if theres enough space for at least 1 more block
+        while len(words_copy) >= block_size:
+            # copy off the block
+            block = words_copy[:block_size]
+            # create a review fragment
+            new_reviews.append(block)
+            new_labels.append(train_labels[each_index])
+            # remove half a block from the review
+            words_copy = words_copy[int(block_size / 2):]
     number_of_fragments = len(new_reviews)
     number_of_words_per_fragment = len(new_reviews[0])
     number_of_features_per_word = word_vec_size
@@ -72,7 +56,12 @@ def convert_to_fragments(train_data, train_labels, block_size=32):
         for each_word_index, each_word in enumerate(each_fragment):
             bundle_of_words += list(np.asarray(index_to_vec(each_word)))    
         fragment_tensor[each_frag_index] = np.asarray(bundle_of_words).astype('float16')
-    return fragment_tensor, np.asarray(new_labels).astype('float16')
+    return fragment_tensor, np.asarray(new_labels).astype('float16') 
+
+#%% 
+# get & reshape data
+#%%
+(train_data, train_labels), (test_data, test_labels) = imdb.load_data(num_words=10000)
 # convert the data into fragments
 x_train, y_train = convert_to_fragments(train_data, train_labels, block_size)
 del train_data
@@ -89,7 +78,9 @@ del wv
 #%%
 model = models.Sequential()
 model.add(layers.Dense(16, activation='relu', input_shape=(block_size * word_vec_size,)))
+model.add(layers.Dropout(0.5))
 model.add(layers.Dense(16, activation='relu'))
+model.add(layers.Dropout(0.5))
 model.add(layers.Dense(1, activation='sigmoid'))
 model.compile(optimizer='rmsprop', loss='binary_crossentropy', metrics=['acc'])
 
