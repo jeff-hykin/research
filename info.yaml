@@ -1,0 +1,6 @@
+(project):
+    (advanced):
+        (dependencies):
+            python3: 3.7.0
+            wget: 1.20.3
+            
