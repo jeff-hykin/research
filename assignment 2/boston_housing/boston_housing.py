@@ -53,7 +53,7 @@ plt.ylabel('Validation MAE')
 plt.show()
 
 #%%
-# smaller graph
+# smoothed graph
 #%%
 def smooth_curve(points, factor=0.9):
   smoothed_points = []
