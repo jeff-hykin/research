@@ -16,7 +16,7 @@
             numpy: 1.9.1
             torch: 1.1.0
             torchvision: 0.3.0
-        ruby: 2.5.0
+            tensorflow: 1.13.1
         libomp: 8.0.0 # for pytorch
     
     (advanced_setup):
