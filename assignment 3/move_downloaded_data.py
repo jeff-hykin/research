@@ -2,6 +2,20 @@ import os, shutil
 
 original_dataset_dir = '/Users/fchollet/Downloads/kaggle_original_data'
 base_dir            = '/Users/fchollet/Downloads/cats_and_dogs_small' ;     os.mkdir(base_dir)
+
+# create this folder structure
+    # train
+        # cats
+        # dogs
+    # validate
+        # cats
+        # dogs
+    # test
+        # cats
+        # dogs
+
+
+
 # data groups
 train_dir           = os.path.join(base_dir      , 'train')       ; os.mkdir(train_dir)
 validation_dir      = os.path.join(base_dir      , 'validation')  ; os.mkdir(validation_dir)
@@ -25,12 +39,16 @@ def move(name, a_range, target):
 
 ranges = [ (0,1000), (1000, 1500), (1500, 2000) ]
     
-
+# Train 
+# take the first 1000 cat pictures and put them in the 
 fnames = ['cat.{}.jpg'.format(i) for i in range(1000)]
 for fname in fnames:
     src = os.path.join(original_dataset_dir, fname)
     dst = os.path.join(train_cats_dir, fname)
     shutil.copyfile(src, dst)
+    
+    
+    
 fnames = ['cat.{}.jpg'.format(i) for i in range(1000, 1500)]
 for fname in fnames:
     src = os.path.join(original_dataset_dir, fname)

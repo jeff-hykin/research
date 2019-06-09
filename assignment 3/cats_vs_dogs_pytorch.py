@@ -2,10 +2,12 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 import torch.optim as optim
+import os
 from torchvision import datasets, transforms
+from dataset import CatsAndDogs
 
 
-class Net(nn.Module):
+class MnistNet(nn.Module):
 
     def __init__(self):
         super(Net, self).__init__()
@@ -23,7 +25,42 @@ class Net(nn.Module):
         x = F.relu(self.fc1(x))
         x = self.fc2(x)
         return F.log_softmax(x, dim=1)
+        
+class Net(nn.Module):
 
+    def __init__(self):
+        super(Net, self).__init__()
+        number_of_colors_in_picture = 3
+        self.image_dimensions = (150, 150)
+        # Create the layers we're going to use
+        self.conv1 = nn.Conv2d(in_channels=number_of_colors_in_picture, out_channels=20, kernel_size=5)
+        self.pool = nn.MaxPool2d(kernel_size=2, stride=2)
+        self.conv2 = nn.Conv2d(in_channels=20, out_channels=30, kernel_size=5)
+        self.fully_connected_layer1 = nn.Linear(in_features=30 * 5 * 5, out_features=300)
+        self.fully_connected_layer2 = nn.Linear(in_features=300, out_features=75)
+        self.fully_connected_layer3 = nn.Linear(in_features=75, out_features=10)
+
+    def forward(self, incoming_data):
+        #
+        # Connect all the layers together
+        #
+        running_data = F.relu(self.conv1(incoming_data))
+        # dimensions = (20, 28 , 28)
+        running_data = self.pool(running_data)
+        # dimensions = (20, 14 , 14)
+        running_data = F.relu(self.conv2(running_data))
+        # dimensions = (30, 10 , 10)
+        running_data = self.pool(running_data)
+        # dimensions = (30,  5 ,  5)
+        running_data = running_data.view(-1, 5 * 5 * 30)
+        # dimensions = (750)
+        running_data = F.relu(self.fully_connected_layer1(running_data))
+        # dimensions = (300)
+        running_data = F.relu(self.fully_connected_layer2(running_data))
+        # dimensions = (75)
+        running_data = torch.sigmoid(self.fully_connected_layer3(running_data))
+        # dimensions = (10)
+        return running_data
 
 def train(log_interval, model, device, train_loader, optimizer, epoch):
     model.train()
@@ -75,7 +112,7 @@ def train_and_test_loaders(batch_size, test_batch_size, data_loader_kwargs):
     transformations = transforms.Compose(
         [
             transforms.ToTensor(),
-            transforms.Normalize((0.1307,), (0.3081,))
+            # transforms.Normalize((0.1307,), (0.3081,))
         ]
     )
     
@@ -83,12 +120,10 @@ def train_and_test_loaders(batch_size, test_batch_size, data_loader_kwargs):
     # Get The Datasets
     #
     where_to_save_dataset = '../data'
-    training_dataset = datasets.MNIST(where_to_save_dataset, train=True, download=True, transform=transformations)
-    test_dataset     = datasets.MNIST(where_to_save_dataset, train=False,               transform=transformations)
-    data = training_dataset.__getitem__(10)
-    print('data[0].shape = ', data[0].shape)
-    print('training_dataset = ', training_dataset.__getitem__(10))
-    exit(0)
+    # training_dataset = datasets.MNIST(where_to_save_dataset, train=True, download=True, transform=transformations)
+    # test_dataset     = datasets.MNIST(where_to_save_dataset, train=False,               transform=transformations)
+    training_dataset = CatsAndDogs(train_validate_or_test="train", transform=transformations)
+    test_dataset     = CatsAndDogs(train_validate_or_test="test" , transform=transformations)
     
     # 
     # Create the loaders (feeds batches of data into model)
@@ -109,7 +144,7 @@ def main():
     use_cuda        = True
     seed            = 1 # random seed
     log_interval    = 10
-    save_model      = False
+    save_model      = True
     
     # add seed
     torch.manual_seed(seed)
@@ -148,7 +183,7 @@ def main():
     # Save model
     # 
     if (save_model):
-        torch.save(model.state_dict(), "mnist_cnn.pt")
+        torch.save(model.state_dict(), "cats_and_dogs_cnn.pt")
 
 
 if __name__ == '__main__':
