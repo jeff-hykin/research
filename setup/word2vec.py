@@ -12,7 +12,6 @@ if not google_download_exists:
     print("downloading the google file for Word2Vec. It's 1.5Gb so its going to take awhile")
     common_tools['download_file_from_google_drive']('0B7XkCwpI5KDYNlNUTTlSS21pQmM', google_file_name+".gz")
     os.system(f"gunzip {google_file_name}.gz")
-    print("downloaded. If it's gzipped you'll probably need to extract it yourself")
 
 # Load Google's pre-trained Word2Vec model.
 print("Loading google's model (this is going to take awhile)")

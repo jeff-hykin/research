@@ -5,3 +5,5 @@
 - Is there a way to take the average of a layer?
 
 - How would the results pan out if whitespaces were treated as a word to teach the meaning of "nothing" and allow trailing whitespace
+
+- What stops a regular neural network from learning the effective shape of a convolutional network?
