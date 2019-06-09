@@ -40,10 +40,10 @@ def get_dataset():
     common_tools['download_file_from_google_drive']('1JjA15jy42W90q5Oi-o4jK9qLklHgZses', dataset_name)
 
     # unzip the download
-    with ZipFile(dataset_name, 'r') as zip_obj:
+    with zipfile.ZipFile(dataset_name, 'r') as zip_obj:
         zip_obj.extractall('./'+os.path.splitext(dataset_name)[0])
     # unzip the training set
-    with ZipFile('train.zip', 'r') as zip_obj:
+    with zipfile.ZipFile('train.zip', 'r') as zip_obj:
         zip_obj.extractall('./train')
     # rename it
     os.rename("train", training_folder_name) 
