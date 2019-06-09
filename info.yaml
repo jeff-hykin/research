@@ -5,9 +5,9 @@
     
     commands: &commands # if you dont know what the & means, see https://blog.daemonl.com/2016/02/yaml.html
         setup: 
-            python3 setup/word2vec.py
-            python3 setup/download_dogs_and_cats.py
-            ruby setup/sort_cats_and_dogs.rb
+            python3 setup/word2vec.py;
+            python3 setup/download_dogs_and_cats.py;
+            ruby setup/sort_cats_and_dogs.rb;
     dependencies: &dependencies
         atk: 0.0.1
         python3: 3.7.3
@@ -16,7 +16,10 @@
             requests: 2.22.0
             keras: 2.2.4
             numpy: 1.9.1
+            torch: 1.1.0
+            torchvision: 0.3.0
         ruby: 2.5.0
+        libomp: 8.0.0 # for pytorch
     
     (advanced_setup):
         (put_new_dependencies_under): [ '(project)', 'dependencies' ]
