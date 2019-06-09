@@ -18,6 +18,7 @@ class CatsAndDogs(Dataset):
     def __len__(self):
         return count # of how many data(images?) you have
         
+        
 if __name__ == '__main__':
     # Define transforms (1)
     transformations = transforms.Compose([transforms.CenterCrop(100), transforms.ToTensor()])
