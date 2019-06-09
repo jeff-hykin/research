@@ -4,7 +4,7 @@ import torch.nn.functional as F
 import torch.optim as optim
 import os
 from torchvision import datasets, transforms
-from dataset import CatsAndDogs
+from cats_vs_dogs_dataset import CatsAndDogs
 
 
 class MnistNet(nn.Module):
