@@ -41,10 +41,10 @@ def get_dataset():
 
     # unzip the download
     with zipfile.ZipFile(dataset_name, 'r') as zip_obj:
-        zip_obj.extractall('./'+os.path.splitext(dataset_name)[0])
+        zip_obj.extractall()
     # unzip the training set
     with zipfile.ZipFile('train.zip', 'r') as zip_obj:
-        zip_obj.extractall('./train')
+        zip_obj.extractall()
     # rename it
     os.rename("train", training_folder_name) 
     # remove zip files
@@ -52,6 +52,10 @@ def get_dataset():
     os.remove("train.zip")
     os.remove("sampleSubmission.csv")
     os.remove(dataset_name)
+    try:
+        shutil.rmtree(os.path.basename(dataset_name))
+    except:
+        pass
 
     from glob import glob
     import math
