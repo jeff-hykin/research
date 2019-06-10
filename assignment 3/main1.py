@@ -82,19 +82,19 @@ val_loss = history.history['val_loss']
 
 epochs = range(len(acc))
 
-plt.plot(epochs, acc, 'bo', label='Training acc')
-plt.plot(epochs, val_acc, 'b', label='Validation acc')
-plt.title('Training and validation accuracy')
-plt.legend()
+# plt.plot(epochs, acc, 'bo', label='Training acc')
+# plt.plot(epochs, val_acc, 'b', label='Validation acc')
+# plt.title('Training and validation accuracy')
+# plt.legend()
 
-plt.figure()
+# plt.figure()
 
-plt.plot(epochs, loss, 'bo', label='Training loss')
-plt.plot(epochs, val_loss, 'b', label='Validation loss')
-plt.title('Training and validation loss')
-plt.legend()
+# plt.plot(epochs, loss, 'bo', label='Training loss')
+# plt.plot(epochs, val_loss, 'b', label='Validation loss')
+# plt.title('Training and validation loss')
+# plt.legend()
 
-plt.show()
+# plt.show()
 
 from keras import models
 from keras import layers
@@ -170,19 +170,19 @@ val_loss = history.history['val_loss']
 
 epochs = range(len(acc))
 
-plt.plot(epochs, acc, 'bo', label='Training acc')
-plt.plot(epochs, val_acc, 'b', label='Validation acc')
-plt.title('Training and validation accuracy')
-plt.legend()
+# plt.plot(epochs, acc, 'bo', label='Training acc')
+# plt.plot(epochs, val_acc, 'b', label='Validation acc')
+# plt.title('Training and validation accuracy')
+# plt.legend()
 
-plt.figure()
+# plt.figure()
 
-plt.plot(epochs, loss, 'bo', label='Training loss')
-plt.plot(epochs, val_loss, 'b', label='Validation loss')
-plt.title('Training and validation loss')
-plt.legend()
+# plt.plot(epochs, loss, 'bo', label='Training loss')
+# plt.plot(epochs, val_loss, 'b', label='Validation loss')
+# plt.title('Training and validation loss')
+# plt.legend()
 
-plt.show()
+# plt.show()
 
 conv_base.summary()
 
@@ -220,19 +220,19 @@ val_loss = history.history['val_loss']
 
 epochs = range(len(acc))
 
-plt.plot(epochs, acc, 'bo', label='Training acc')
-plt.plot(epochs, val_acc, 'b', label='Validation acc')
-plt.title('Training and validation accuracy')
-plt.legend()
+# plt.plot(epochs, acc, 'bo', label='Training acc')
+# plt.plot(epochs, val_acc, 'b', label='Validation acc')
+# plt.title('Training and validation accuracy')
+# plt.legend()
 
-plt.figure()
+# plt.figure()
 
-plt.plot(epochs, loss, 'bo', label='Training loss')
-plt.plot(epochs, val_loss, 'b', label='Validation loss')
-plt.title('Training and validation loss')
-plt.legend()
+# plt.plot(epochs, loss, 'bo', label='Training loss')
+# plt.plot(epochs, val_loss, 'b', label='Validation loss')
+# plt.title('Training and validation loss')
+# plt.legend()
 
-plt.show()
+# plt.show()
 
 
 def smooth_curve(points, factor=0.8):
@@ -246,19 +246,19 @@ def smooth_curve(points, factor=0.8):
     return smoothed_points
 
 
-plt.plot(epochs, smooth_curve(acc), 'bo', label='Smoothed training acc')
-plt.plot(epochs, smooth_curve(val_acc), 'b', label='Smoothed validation acc')
-plt.title('Training and validation accuracy')
-plt.legend()
+# plt.plot(epochs, smooth_curve(acc), 'bo', label='Smoothed training acc')
+# plt.plot(epochs, smooth_curve(val_acc), 'b', label='Smoothed validation acc')
+# plt.title('Training and validation accuracy')
+# plt.legend()
 
-plt.figure()
+# plt.figure()
 
-plt.plot(epochs, smooth_curve(loss), 'bo', label='Smoothed training loss')
-plt.plot(epochs, smooth_curve(val_loss), 'b', label='Smoothed validation loss')
-plt.title('Training and validation loss')
-plt.legend()
+# plt.plot(epochs, smooth_curve(loss), 'bo', label='Smoothed training loss')
+# plt.plot(epochs, smooth_curve(val_loss), 'b', label='Smoothed validation loss')
+# plt.title('Training and validation loss')
+# plt.legend()
 
-plt.show()
+# plt.show()
 
 test_generator = test_datagen.flow_from_directory(
     test_dir, target_size=(150, 150), batch_size=20, class_mode='binary'
