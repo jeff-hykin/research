@@ -9,17 +9,46 @@ from keras import layers
 from keras import optimizers
 
 
+def plot(history):
+    def smooth_curve(points, factor=0.8):
+        smoothed_points = []
+        for point in points:
+            if smoothed_points:
+                previous = smoothed_points[-1]
+                smoothed_points.append(previous*factor + point * (1-factor))
+            else:
+                smoothed_points.append(point)
+        return smoothed_points
+
+
+    plt.plot(epochs, smooth_curve(acc), 'bo', label='Smoothed training acc')
+    plt.plot(epochs, smooth_curve(val_acc), 'b', label='Smoothed validation acc')
+    plt.title('Training and validation accuracy')
+    plt.legend()
+
+    plt.figure()
+
+    plt.plot(epochs, smooth_curve(loss), 'bo', label='Smoothed training loss')
+    plt.plot(epochs, smooth_curve(val_loss), 'b', label='Smoothed validation loss')
+    plt.title('Training and validation loss')
+    plt.legend()
+
+    plt.show()
+
+
+
+#
+# Pre-trained
+#
 conv_base = VGG16(
     weights='imagenet', include_top=False, input_shape=(150, 150, 3)
 )
 
-
-
 base_dir = os.path.dirname(__file__)
 
-train_dir      = os.path.join(base_dir, 'train.nosync')
+train_dir = os.path.join(base_dir, 'train.nosync')
 validation_dir = os.path.join(base_dir, 'validate.nosync')
-test_dir       = os.path.join(base_dir, 'test.nosync')
+test_dir = os.path.join(base_dir, 'test.nosync')
 
 datagen = ImageDataGenerator(rescale=1. / 255)
 batch_size = 20
@@ -49,6 +78,7 @@ def extract_features(directory, sample_count):
             break
     return features, labels
 
+
 train_features, train_labels = extract_features(train_dir, 2000)
 validation_features, validation_labels = extract_features(validation_dir, 1000)
 test_features, test_labels = extract_features(test_dir, 1000)
@@ -75,24 +105,39 @@ history = model.fit(
     batch_size=20,
     validation_data=(validation_features, validation_labels)
 )
+model.save('cats_and_dogs_small_3.h5')
 
-acc = history.history['acc']
-val_acc = history.history['val_acc']
-loss = history.history['loss']
-val_loss = history.history['val_loss']
+# show the history
+plot(history)
 
-epochs = range(len(acc))
 
-plt.plot(epochs, acc, 'bo', label='Training acc')
-plt.plot(epochs, val_acc, 'b', label='Validation acc')
-plt.title('Training and validation accuracy')
-plt.legend()
+#
+# Round 2, fine tuning
+#
+conv_base.trainable = True
+set_trainable = False
+for layer in conv_base.layers:
+    if layer.name == 'block5_conv1':
+        set_trainable = True
+    if set_trainable:
+        layer.trainable = True
+    else:
+        layer.trainable = False
 
-plt.figure()
+model.compile(
+    loss='binary_crossentropy',
+    optimizer=optimizers.RMSprop(lr=1e-5),
+    metrics=['acc']
+)
 
-plt.plot(epochs, loss, 'bo', label='Training loss')
-plt.plot(epochs, val_loss, 'b', label='Validation loss')
-plt.title('Training and validation loss')
-plt.legend()
+history = model.fit_generator(
+    train_generator,
+    steps_per_epoch=100,
+    epochs=100,
+    validation_data=validation_generator,
+    validation_steps=50
+)
+model.save('cats_and_dogs_small_4.h5')
 
-plt.show()
+# show the history
+plot(history)
