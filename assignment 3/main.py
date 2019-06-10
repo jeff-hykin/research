@@ -10,6 +10,13 @@ from keras import optimizers
 
 
 def plot(history):
+    acc = history.history['acc']
+    val_acc = history.history['val_acc']
+    loss = history.history['loss']
+    val_loss = history.history['val_loss']
+
+    epochs = range(len(acc))
+    
     def smooth_curve(points, factor=0.8):
         smoothed_points = []
         for point in points:
