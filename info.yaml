@@ -7,13 +7,7 @@
         setup: 
             python3 setup/word2vec.py;
         "3": |
-            ssh 'jeff-hykin@192.168.86.95' '
-            cd ~/Programming/research/assignment\ 3;
-            pwd
-            git fetch;
-            git pull;
-            python3 main.py
-            echo done;'
+            cd ~/Programming/research/; git fetch; git pull; python3 ~/Programming/research/assignment\ 3/main.py
     dependencies: &dependencies
         atk: 0.0.1
         python3: 3.7.3
