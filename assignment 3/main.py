@@ -7,7 +7,8 @@ from keras.applications import VGG16
 from keras import models
 from keras import layers
 from keras import optimizers
-
+import matplotlib
+matplotlib.use('Agg') 
 
 def plot(history):
     acc = history.history['acc']
