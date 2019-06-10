@@ -11,6 +11,7 @@ import matplotlib
 matplotlib.use('Agg') 
 
 def plot(history):
+    return
     acc = history.history['acc']
     val_acc = history.history['val_acc']
     loss = history.history['loss']
