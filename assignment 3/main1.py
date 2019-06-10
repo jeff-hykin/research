@@ -9,11 +9,12 @@ import os
 import numpy as np
 from keras.preprocessing.image import ImageDataGenerator
 
-base_dir = '/Users/fchollet/Downloads/cats_and_dogs_small'
 
-train_dir = os.path.join(base_dir, 'train')
-validation_dir = os.path.join(base_dir, 'validation')
-test_dir = os.path.join(base_dir, 'test')
+base_dir = os.path.dirname(__file__)
+
+train_dir = os.path.join(base_dir, 'train.nosync')
+validation_dir = os.path.join(base_dir, 'validate.nosync')
+test_dir = os.path.join(base_dir, 'test.nosync')
 
 datagen = ImageDataGenerator(rescale=1. / 255)
 batch_size = 20
