@@ -1,3 +1,31 @@
+from glob import glob
+import math
+from os.path import join, basename, dirname
+import os
+
+def sort(folder):
+    all_files = glob(folder + "/*")
+    try:
+        os.mkdir(join(folder,"cat"))
+    except:
+        pass
+    try:
+        os.mkdir(join(folder,"dog"))
+    except:
+        pass
+    for each in all_files:
+        if "cat" in basename(each):
+            os.rename( join(folder,each), join(folder, "cat", basename(each)))
+        else:
+            os.rename( join(folder,each), join(folder, "dog", basename(each)))
+
+training_folder_name   = 'train.nosync'
+validation_folder_name = 'validate.nosync'
+testing_folder_name    = 'test.nosync'
+folders = [ training_folder_name, validation_folder_name, testing_folder_name ]
+for each in folders:
+    sort(join(dirname(__file__), each))
+
 def get_dataset():
     import os
     import shutil
@@ -57,8 +85,7 @@ def get_dataset():
     except:
         pass
 
-    from glob import glob
-    import math
+    
 
     # open up the training folder
     all_train = glob(training_folder_name + "/*")
@@ -76,6 +103,9 @@ def get_dataset():
 
     # move the data
     move(testing_folder_name)
+    
+    for each in folders:
+        sort(folder)
     
     # change back
     os.chdir(current_dir)
