@@ -16,7 +16,7 @@ def plot(history):
     val_loss = history.history['val_loss']
 
     epochs = range(len(acc))
-    
+
     def smooth_curve(points, factor=0.8):
         smoothed_points = []
         for point in points:
@@ -27,21 +27,23 @@ def plot(history):
                 smoothed_points.append(point)
         return smoothed_points
 
-
     plt.plot(epochs, smooth_curve(acc), 'bo', label='Smoothed training acc')
-    plt.plot(epochs, smooth_curve(val_acc), 'b', label='Smoothed validation acc')
+    plt.plot(
+        epochs, smooth_curve(val_acc), 'b', label='Smoothed validation acc'
+    )
     plt.title('Training and validation accuracy')
     plt.legend()
 
     plt.figure()
 
     plt.plot(epochs, smooth_curve(loss), 'bo', label='Smoothed training loss')
-    plt.plot(epochs, smooth_curve(val_loss), 'b', label='Smoothed validation loss')
+    plt.plot(
+        epochs, smooth_curve(val_loss), 'b', label='Smoothed validation loss'
+    )
     plt.title('Training and validation loss')
     plt.legend()
 
     plt.show()
-
 
 
 #
@@ -117,10 +119,55 @@ model.save('cats_and_dogs_small_3.h5')
 # show the history
 plot(history)
 
-
 #
 # Round 2, fine tuning
 #
+
+from keras.preprocessing.image import ImageDataGenerator
+
+train_datagen = ImageDataGenerator(
+    rescale=1. / 255,
+    rotation_range=40,
+    width_shift_range=0.2,
+    height_shift_range=0.2,
+    shear_range=0.2,
+    zoom_range=0.2,
+    horizontal_flip=True,
+    fill_mode='nearest'
+)
+
+# Note that the validation data should not be augmented!
+test_datagen = ImageDataGenerator(rescale=1. / 255)
+
+train_generator = train_datagen.flow_from_directory(
+    # This is the target directory
+    train_dir,
+    # All images will be resized to 150x150
+    target_size=(150, 150),
+    batch_size=20,
+    # Since we use binary_crossentropy loss, we need binary labels
+    class_mode='binary'
+)
+
+validation_generator = test_datagen.flow_from_directory(
+    validation_dir, target_size=(150, 150), batch_size=20, class_mode='binary'
+)
+
+model.compile(
+    loss='binary_crossentropy',
+    optimizer=optimizers.RMSprop(lr=2e-5),
+    metrics=['acc']
+)
+
+history = model.fit_generator(
+    train_generator,
+    steps_per_epoch=100,
+    epochs=30,
+    validation_data=validation_generator,
+    validation_steps=50,
+    verbose=2
+)
+
 conv_base.trainable = True
 set_trainable = False
 for layer in conv_base.layers:
