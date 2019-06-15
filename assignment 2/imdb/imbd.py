@@ -19,7 +19,7 @@ y_train = np.asarray(train_labels).astype('float32')
 x_test = vectorize_sequences(test_data)
 y_test = np.asarray(test_labels).astype('float32')
 
-@cache_model_as("imdb_basic")
+@cache_model_as(".cache/imdb_basic")
 def create_and_train():
     #%% 
     # Create model
@@ -76,7 +76,7 @@ plt.show()
 #%%
 # Retrain with the optimal number of epochs
 #%%
-@cache_model_as("imdb_basic_retrain")
+@cache_model_as(".cache/imdb_basic_retrain")
 def retrain():
     model = models.Sequential()
     model.add(layers.Dense(16, activation='relu', input_shape=(10000,)))

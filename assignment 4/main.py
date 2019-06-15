@@ -42,7 +42,7 @@ def get_imdb_data(max_num_of_unique_words, max_num_of_words_in_a_review):
 #
 # Train model
 #
-@cache_model_as("word_vec_self_trained")
+@cache_model_as(".cache/word_vec_self_trained")
 def train(x_train, y_train, max_num_of_unique_words, max_num_of_words_in_a_review):
     model = Sequential()
     # We specify the maximum input length to our Embedding layer
