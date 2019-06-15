@@ -111,6 +111,12 @@ def make_sure_containing_folder_exists(a_path):
     if not exists(parent_folder):
         os.makedirs(parent_folder)
 
+def download(url, file_path):
+    import requests
+    r = requests.get(url)
+    with open(file_path, 'wb') as f:
+        f.write(r.content)
+
 
 # a decorator for caching models
 def cache_model_as(name_of_model, skip=False): 
