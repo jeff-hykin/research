@@ -3,6 +3,11 @@ from keras import models
 from keras import layers
 from keras.datasets import imdb
 import numpy as np
+
+# allow relative imports, see https://stackoverflow.com/a/11158224/4367134
+import os,sys,inspect
+sys.path.insert(1, os.path.join(sys.path[0], '../..'))
+
 from common_tools import vectorize_sequences
 
 #%% 
