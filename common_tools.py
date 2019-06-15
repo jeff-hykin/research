@@ -117,7 +117,7 @@ def cache_model_as(name_of_model, skip=False):
     # dont edit the next line
     def inner(function_getting_wrapped): 
         # dont edit the next line
-        def wrapper():
+        def wrapper(*args, **kwargs):
             # 
             # EDIT this part
             # 
@@ -142,7 +142,7 @@ def cache_model_as(name_of_model, skip=False):
             else:
                 print(f'generating model {name_of_model}\n\n')
                 # run the function to get the model
-                model, *other_data = function_getting_wrapped()
+                model, *other_data = function_getting_wrapped(*args, **kwargs)
                 # serialize model to JSON
                 print(f'saving model {name_of_model}\n\n')
                 model.save(model_file_path)
@@ -163,7 +163,7 @@ def cache_output_as(name_of_data, skip=False):
     # dont edit the next line
     def inner(function_getting_wrapped): 
         # dont edit the next line
-        def wrapper():
+        def wrapper(*args, **kwargs):
             # 
             # EDIT this part
             # 
@@ -188,7 +188,7 @@ def cache_output_as(name_of_data, skip=False):
             else:
                 print(f'running function {name_of_data}\n\n')
                 # run the function to get the model
-                data = function_getting_wrapped()
+                data = function_getting_wrapped(*args, **kwargs)
                 # serialize model to JSON
                 print(f'saving data {name_of_data}\n\n')
                 # save the data using pickle
