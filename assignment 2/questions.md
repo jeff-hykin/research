@@ -6,6 +6,6 @@
 
 - How would the results pan out if whitespaces were treated as a word to teach the meaning of "nothing" and allow trailing whitespace
 
+- Where are the number of features specified in a convnet?
+
 - What stops a regular neural network from learning the effective shape of a convolutional network?
-- Where are the number of features specified?
-- How are channels fundamentally different than the other dimensions (why high channel number and low other dimensions)
