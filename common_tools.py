@@ -2,7 +2,7 @@ import numpy as np
 import requests
 import pickle
 import os
-from os.path import isfile
+from os.path import isabs, isfile, isdir, join, dirname, basename, exists
 from keras.models import load_model
 
 def vectorize_sequences(sequences, dimension=10000):
@@ -99,6 +99,19 @@ def large_pickle_save(variable, file_path):
         for idx in range(0, len(bytes_out), max_bytes):
             f_out.write(bytes_out[idx:idx+max_bytes])
 
+def make_sure_containing_folder_exists(a_path):
+    from os.path import isabs, isfile, isdir, join, dirname, basename, exists
+    import os
+    # make abs if its not
+    if not isabs(a_path):
+        a_path = join(os.getcwd(), a_path)
+    
+    parent_folder = dirname(a_path)
+    # create the data folder if it doesnt exist
+    if not exists(parent_folder):
+        os.makedirs(parent_folder)
+
+
 # a decorator for caching models
 def cache_model_as(name_of_model, skip=False): 
     # dont edit the next line
@@ -108,9 +121,10 @@ def cache_model_as(name_of_model, skip=False):
             # 
             # EDIT this part
             # 
-            
             model_file_path = name_of_model + ".nosync.h5"
             other_data_path = name_of_model + ".nosync.pickle"
+            make_sure_containing_folder_exists(model_file_path)
+            make_sure_containing_folder_exists(other_data_path)
             
             # check if model was already saved
             from os.path import isfile
@@ -118,7 +132,7 @@ def cache_model_as(name_of_model, skip=False):
             other_data = []
             # if both files exist, then load them
             if isfile(model_file_path) and not skip:
-                print("loading model from local files")
+                print(f"loading model {name_of_model} from local files\n\n")
                 # load json and create model
                 model = load_model(model_file_path)
                 if isfile(other_data_path):
@@ -126,11 +140,11 @@ def cache_model_as(name_of_model, skip=False):
                 
             # if the model doesn't exist yet
             else:
-                print('generating model')
+                print(f'generating model {name_of_model}\n\n')
                 # run the function to get the model
                 model, *other_data = function_getting_wrapped()
                 # serialize model to JSON
-                print('saving model')
+                print(f'saving model {name_of_model}\n\n')
                 model.save(model_file_path)
                 if len(other_data) > 0:
                     # save all the other data as a pickle file
@@ -138,6 +152,50 @@ def cache_model_as(name_of_model, skip=False):
                 
             # return the trained model
             return (model, *other_data)
+            
+        # dont edit the next line
+        return wrapper 
+    # dont edit the next line
+    return inner
+
+# a decorator for caching models
+def cache_output_as(name_of_data, skip=False): 
+    # dont edit the next line
+    def inner(function_getting_wrapped): 
+        # dont edit the next line
+        def wrapper():
+            # 
+            # EDIT this part
+            # 
+            
+            # check if data was already saved
+            from os.path import isfile
+            import os
+            
+            data_path = name_of_data + ".nosync.pickle"
+            make_sure_containing_folder_exists(data_path)
+            
+            # create the data folder if it doesnt exist
+            if not os.path.exists(directory):
+                os.makedirs(directory)
+            
+            # if both files exist, then load them
+            if isfile(data_path) and not skip:
+                print(f"loading {name_of_data} from local files\n\n")
+                data = large_pickle_load(data_path)
+
+            # if the data doesn't exist yet
+            else:
+                print(f'running function {name_of_data}\n\n')
+                # run the function to get the model
+                data = function_getting_wrapped()
+                # serialize model to JSON
+                print(f'saving data {name_of_data}\n\n')
+                # save the data using pickle
+                large_pickle_save(other_data, data_path)
+                
+            # return the trained model
+            return data
             
         # dont edit the next line
         return wrapper 
