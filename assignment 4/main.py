@@ -6,7 +6,7 @@ from keras.models import Sequential
 from keras.layers import Flatten, Dense
 # allow relative imports, see https://stackoverflow.com/a/11158224/4367134
 import os,sys,inspect
-sys.path.insert(1, os.path.join(sys.path[0], '../..'))
+sys.path.insert(1, os.path.join(sys.path[0], '..'))
 from common_tools import cache_model_as
 
 
