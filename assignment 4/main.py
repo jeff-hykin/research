@@ -3,7 +3,7 @@
 from keras.datasets import imdb
 from keras import preprocessing
 from keras.models import Sequential
-from keras.layers import Flatten, Dense
+from keras.layers import Flatten, Dense, Embedding
 # allow relative imports, see https://stackoverflow.com/a/11158224/4367134
 import os,sys,inspect
 sys.path.insert(1, os.path.join(sys.path[0], '..'))
@@ -47,7 +47,7 @@ def train(x_train, y_train, max_num_of_unique_words, max_num_of_words_in_a_revie
     model = Sequential()
     # We specify the maximum input length to our Embedding layer
     # so we can later flatten the embedded inputs
-    model.add(Embedding(10000, 8, input_length=max_num_of_words_in_a_review))
+    model.add(Embedding(max_num_of_unique_words, 8, input_length=max_num_of_words_in_a_review))
     # After the Embedding layer,
     # our activations have shape `(samples, maxlen, 8)`.
 
