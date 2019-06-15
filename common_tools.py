@@ -1,3 +1,10 @@
+import numpy as np
+import requests
+import pickle
+import os
+from os.path import isfile
+from keras.models import load_model
+
 def vectorize_sequences(sequences, dimension=10000):
     import numpy as np
     results = np.zeros((len(sequences), dimension))
@@ -75,6 +82,7 @@ def google_words():
 
 def large_pickle_load(file_path):
     import pickle
+    import os
     max_bytes = 2**31 - 1
     bytes_in = bytearray(0)
     input_size = os.path.getsize(file_path)
@@ -92,7 +100,7 @@ def large_pickle_save(variable, file_path):
             f_out.write(bytes_out[idx:idx+max_bytes])
 
 # a decorator for caching models
-def cache_model_as(name_of_model): 
+def cache_model_as(name_of_model, skip=False): 
     # dont edit the next line
     def inner(function_getting_wrapped): 
         # dont edit the next line
@@ -101,34 +109,35 @@ def cache_model_as(name_of_model):
             # EDIT this part
             # 
             
-            json_ending = ".nosync.json"
-            h5_ending = ".nosync.h5"
+            model_file_path = name_of_model + ".nosync.h5"
+            other_data_path = name_of_model + ".nosync.pickle"
             
             # check if model was already saved
             from os.path import isfile
+            from keras.models import load_model
+            other_data = []
             # if both files exist, then load them
-            if isfile(model_name+json_ending) and isfile(model_name+h5_ending):
+            if isfile(model_file_path) and not skip:
                 print("loading model from local files")
                 # load json and create model
-                json_file = open(model_name+json_ending, 'r')
-                loaded_model_json = json_file.read()
-                json_file.close()
-                model = model_from_json(loaded_model_json)
-                # load weights into new model
-                model.load_weights(model_name+h5_ending)
+                model = load_model(model_file_path)
+                if isfile(other_data_path):
+                    other_data = large_pickle_load(other_data_path)
+                
             # if the model doesn't exist yet
             else:
+                print('generating model')
                 # run the function to get the model
-                model = function_getting_wrapped()
+                model, *other_data = function_getting_wrapped()
                 # serialize model to JSON
-                model_json = model.to_json()
-                with open(model_name+json_ending, "w") as json_file:
-                    json_file.write(model_json)
-                # serialize weights to HDF5
-                model.save_weights(model_name+h5_ending)
-                print("Saved model to disk")
+                print('saving model')
+                model.save(model_file_path)
+                if len(other_data) > 0:
+                    # save all the other data as a pickle file
+                    large_pickle_save(other_data, other_data_path)
+                
             # return the trained model
-            return model
+            return (model, *other_data)
             
         # dont edit the next line
         return wrapper 

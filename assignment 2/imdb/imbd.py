@@ -8,7 +8,7 @@ import numpy as np
 import os,sys,inspect
 sys.path.insert(1, os.path.join(sys.path[0], '../..'))
 
-from common_tools import vectorize_sequences
+from common_tools import vectorize_sequences, cache_model_as
 
 #%% 
 # get & reshape data
@@ -19,23 +19,29 @@ y_train = np.asarray(train_labels).astype('float32')
 x_test = vectorize_sequences(test_data)
 y_test = np.asarray(test_labels).astype('float32')
 
-#%% 
-# Create model
-#%%
-model = models.Sequential()
-model.add(layers.Dense(16, activation='relu', input_shape=(10000,)))
-model.add(layers.Dense(16, activation='relu'))
-model.add(layers.Dense(1, activation='sigmoid'))
-model.compile(optimizer='rmsprop', loss='binary_crossentropy', metrics=['acc'])
+@cache_model_as("imdb_basic")
+def create_and_train():
+    #%% 
+    # Create model
+    #%%
+    model = models.Sequential()
+    model.add(layers.Dense(16, activation='relu', input_shape=(10000,)))
+    model.add(layers.Dense(16, activation='relu'))
+    model.add(layers.Dense(1, activation='sigmoid'))
+    model.compile(optimizer='rmsprop', loss='binary_crossentropy', metrics=['acc'])
 
-#%%
-# Train and test
-#%%
-x_val = x_train[:10000] # set aside the first 10000
-y_val = y_train[:10000]
-partial_x_train = x_train[10000:]
-partial_y_train = y_train[10000:]
-history = model.fit(partial_x_train, partial_y_train, epochs=20, batch_size=512, validation_data=(x_val, y_val))
+    #%%
+    # Train and test
+    #%%
+    x_val = x_train[:10000] # set aside the first 10000
+    y_val = y_train[:10000]
+    partial_x_train = x_train[10000:]
+    partial_y_train = y_train[10000:]
+    history = model.fit(partial_x_train, partial_y_train, epochs=20, batch_size=512, validation_data=(x_val, y_val))
+    # model needs to be returned first for the @cache_model_as() decorator
+    return model, history
+
+model, history = create_and_train()
 
 #%%
 # Display Loss Graph
@@ -70,13 +76,18 @@ plt.show()
 #%%
 # Retrain with the optimal number of epochs
 #%%
-model = models.Sequential()
-model.add(layers.Dense(16, activation='relu', input_shape=(10000,)))
-model.add(layers.Dense(16, activation='relu'))
-model.add(layers.Dense(1, activation='sigmoid'))
-model.compile(optimizer='rmsprop', loss='binary_crossentropy', metrics=['accuracy'])
-model.fit(x_train, y_train, epochs=4, batch_size=512)
-results = model.evaluate(x_test, y_test)
+@cache_model_as("imdb_basic_retrain")
+def retrain():
+    model = models.Sequential()
+    model.add(layers.Dense(16, activation='relu', input_shape=(10000,)))
+    model.add(layers.Dense(16, activation='relu'))
+    model.add(layers.Dense(1, activation='sigmoid'))
+    model.compile(optimizer='rmsprop', loss='binary_crossentropy', metrics=['accuracy'])
+    model.fit(x_train, y_train, epochs=4, batch_size=512)
+    results = model.evaluate(x_test, y_test)
+    return model, results
+
+model, results = retrain()
 print('results = ', results)
 
 #%%
