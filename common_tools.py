@@ -90,3 +90,47 @@ def large_pickle_save(variable, file_path):
     with open(file_path, 'wb') as f_out:
         for idx in range(0, len(bytes_out), max_bytes):
             f_out.write(bytes_out[idx:idx+max_bytes])
+
+# a decorator for caching models
+def cache_model_as(name_of_model): 
+    # dont edit the next line
+    def inner(function_getting_wrapped): 
+        # dont edit the next line
+        def wrapper():
+            # 
+            # EDIT this part
+            # 
+            
+            json_ending = ".nosync.json"
+            h5_ending = ".nosync.h5"
+            
+            # check if model was already saved
+            from os.path import isfile
+            # if both files exist, then load them
+            if isfile(model_name+json_ending) and isfile(model_name+h5_ending):
+                print("loading model from local files")
+                # load json and create model
+                json_file = open(model_name+json_ending, 'r')
+                loaded_model_json = json_file.read()
+                json_file.close()
+                model = model_from_json(loaded_model_json)
+                # load weights into new model
+                model.load_weights(model_name+h5_ending)
+            # if the model doesn't exist yet
+            else:
+                # run the function to get the model
+                model = function_getting_wrapped()
+                # serialize model to JSON
+                model_json = model.to_json()
+                with open(model_name+json_ending, "w") as json_file:
+                    json_file.write(model_json)
+                # serialize weights to HDF5
+                model.save_weights(model_name+h5_ending)
+                print("Saved model to disk")
+            # return the trained model
+            return model
+            
+        # dont edit the next line
+        return wrapper 
+    # dont edit the next line
+    return inner
