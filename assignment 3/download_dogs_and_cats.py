@@ -1,7 +1,15 @@
+import os
+import shutil
+import zipfile
+from pathlib import Path
 from glob import glob
 import math
 from os.path import join, basename, dirname, isfile
 import os
+# allow relative imports, see https://stackoverflow.com/a/11158224/4367134
+import os,sys,inspect
+sys.path.insert(1, os.path.join(sys.path[0], '..'))
+from common_tools import download_file_from_google_drive
 
 def sort(folder):
     all_files = glob(folder + "/*")
@@ -21,12 +29,6 @@ def sort(folder):
                 os.rename( join(folder,basename(each)), join(folder, "dog", basename(each)))
 
 def get_dataset():
-    import os
-    import shutil
-    import zipfile
-    from pathlib import Path
-    common_tools = (lambda p,i={}:exec(Path(os.path.join(os.path.dirname(__file__),p)).read_text(),globals(),i)or i)('../common_tools.py')
-
     training_folder_name   = 'train.nosync'
     validation_folder_name = 'validate.nosync'
     testing_folder_name    = 'test.nosync'
@@ -59,7 +61,7 @@ def get_dataset():
     #
     # print("downloading the google file for Cats and Dogs. It's 800Mb so its going to take awhile")
     dataset_name = "dataset.zip"
-    common_tools['download_file_from_google_drive']('1JjA15jy42W90q5Oi-o4jK9qLklHgZses', dataset_name)
+    download_file_from_google_drive('1JjA15jy42W90q5Oi-o4jK9qLklHgZses', dataset_name)
 
     # unzip the download
     with zipfile.ZipFile(dataset_name, 'r') as zip_obj:
