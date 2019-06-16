@@ -2,8 +2,12 @@ import numpy as np
 import requests
 import pickle
 import os
-from os.path import isabs, isfile, isdir, join, dirname, basename, exists
+from os.path import isabs, isfile, isdir, join, dirname, basename, exists, splitext
+from os import remove, getcwd, makedirs, listdir, rename, rmdir
+from shutil import move
 from keras.models import load_model
+import tempfile
+import tarfile    
 
 def vectorize_sequences(sequences, dimension=10000):
     import numpy as np
@@ -207,3 +211,92 @@ def cache_output_as(name_of_data, skip=False):
         return wrapper 
     # dont edit the next line
     return inner
+
+def untar(tar_path, folder_path):
+    from os import listdir, rename, rmdir
+    from shutil import move
+    import tempfile
+    import tarfile
+    
+    print("untar-ing download")
+    if not isdir(folder_path):
+        tf = tarfile.open(tar_path)
+        tf.extractall(path=folder_path)
+    else:
+        raise "there is already a {folder_path}, please remove/rename it before proceding"
+
+def remove_wrapper_folder(folder_path):
+    from os.path import isabs, isfile, isdir, join, dirname, basename, exists, splitext
+    from os import remove, getcwd, makedirs, listdir, rename, rmdir
+    from shutil import move
+    import tempfile
+    a_temp_location = tempfile.mkdtemp(prefix='wrapper_remover_')
+    # pop it out of a wrapper folder
+    files = listdir(folder_path)
+    if len(files) == 1:
+        # rename the file the same as the containing folder
+        new_name = basename(folder_path)
+        rename(join(folder_path, files[0]), join(folder_path,new_name))
+        internal_file = join(folder_path, new_name)
+        # move it to a temp location
+        move(internal_file, a_temp_location)
+        # remove the empty directory
+        rmdir(folder_path)
+        # # move it to what was the containing dir
+        move(join(a_temp_location, new_name), dirname(folder_path))
+    # if there's no files then remove the dir, there's probably an issue since the untar should be doing something
+    elif len(files) == 0:
+        rmdir(folder_path)
+
+def easy_download(url, destination_folder, new_name):
+    import regex as re
+    destination_path = join(destination_folder, new_name)
+    
+    # 
+    # check if already exists
+    # 
+    if exists(destination_path):
+        raise f"There's already a {destination_path}"
+    else:
+        # check if its a zip or tar
+        base, extension = splitext(destination_path)
+        if extension == ".zip" or extension == ".gz":
+            if exists(base):
+                    raise f"There's already a {base2}"
+            base2, extension2 = splitext(base)
+            if extension2 == ".tar":
+                if exists(base2):
+                    raise f"There's already a {base2}"
+                
+    # 
+    # download the file
+    # 
+    match = re.match(r'(https?:)?drive\.google\.com\/file\/.+?\/(?P<id>.+?)\/',url)
+    # if its a google drive url, then extract the id and use it
+    if match != None:
+        download_file_from_google_drive(match.groups('id'), destination)
+    # if its a normal url
+    else:
+        download(url, destination_path)
+    
+    # 
+    # auto extract it
+    # 
+    base, extension1 = splitext(destination_path)
+    print('extension1 = ', extension1)
+    if extension1 == ".gz":
+        base2, extension2 = splitext(base)
+        if extension2 == ".tar":
+            base = base2
+        # move everything to a containing folder
+        untar(destination_path, base)
+    elif extension2 == ".zip":
+        import zipfile
+        zip_ref = zipfile.ZipFile(destination_path, 'r')
+        zip_ref.extractall(base)
+        zip_ref.close()
+    
+    # 
+    # clean up the extraction
+    # 
+    remove_wrapper_folder(base)
