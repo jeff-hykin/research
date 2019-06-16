@@ -186,8 +186,8 @@ def cache_output_as(name_of_data, skip=False):
             make_sure_containing_folder_exists(data_path)
             
             # create the data folder if it doesnt exist
-            if not os.path.exists(directory):
-                os.makedirs(directory)
+            if not os.path.exists(data_path):
+                os.makedirs(data_path)
             
             # if both files exist, then load them
             if isfile(data_path) and not skip:
