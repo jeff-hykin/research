@@ -134,7 +134,6 @@ def add_pre_trained_embedding(model):
 # 
 # create model for both the pre trained an normal train modes
 # 
-@cache_model_as("a4-frozen_pretrain")
 def train_network(max_words, maxlen, initial_training):
     if initial_training:
         data_amount = 1000
