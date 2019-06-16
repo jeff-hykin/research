@@ -145,9 +145,13 @@ def tokenize():
     y_train = labels[:training_samples]
     x_val = data[training_samples: training_samples + validation_samples]
     y_val = labels[training_samples: training_samples + validation_samples]
-    return (x_train, y_train, x_val, y_val, max_words)
+    output = (x_train, y_train, x_val, y_val, max_words)
+    print('len(output) = ', len(output))
+    return output
 
-x_train, y_train, x_val, y_val, max_words = tokenize()
+input_ = tokenize()
+print('len(input_) = ', len(input_))
+x_train, y_train, x_val, y_val, max_words = input_
 
 # 
 # get the glove data
