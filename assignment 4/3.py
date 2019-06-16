@@ -134,7 +134,7 @@ def add_pre_trained_embedding(model):
 # 
 # create model with fixed pretrained embedding
 # 
-@cache_model_as("a4-train_and_eval3")
+@cache_model_as("a4-train_and_eval4")
 def train_and_eval3(max_words, maxlen):
     from keras.models import Sequential
     from keras.layers import Embedding, Flatten, Dense
@@ -142,7 +142,7 @@ def train_and_eval3(max_words, maxlen):
     model = Sequential()
     
     add_pre_trained_embedding(model)
-    model.layers[0].trainable = False
+    # model.layers[0].trainable = False
     model.add(Flatten())
     model.add(Dense(32, activation='relu'))
     model.add(Dense(1, activation='sigmoid'))
