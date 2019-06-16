@@ -170,3 +170,71 @@ for line in f:
 f.close()
 
 print('Found %s word vectors.' % len(embeddings_index))
+
+
+
+embedding_dim = 100
+
+embedding_matrix = np.zeros((max_words, embedding_dim))
+for word, i in word_index.items():
+    embedding_vector = embeddings_index.get(word)
+    if i < max_words:
+        if embedding_vector is not None:
+            # Words not found in embedding index will be all-zeros.
+            embedding_matrix[i] = embedding_vector
+
+@cache_model_as("a4-train_and_eval3")
+def train_and_eval3(max_words, embedding_dim, maxlen, embedding_matrix):
+    from keras.models import Sequential
+    from keras.layers import Embedding, Flatten, Dense
+
+    model = Sequential()
+    model.add(Embedding(max_words, embedding_dim, input_length=maxlen))
+    model.add(Flatten())
+    model.add(Dense(32, activation='relu'))
+    model.add(Dense(1, activation='sigmoid'))
+    model.summary()
+
+
+    model.layers[0].set_weights([embedding_matrix])
+    model.layers[0].trainable = False
+
+    model.compile(optimizer='rmsprop',
+                loss='binary_crossentropy',
+                metrics=['acc'])
+    history = model.fit(x_train, y_train,
+                        epochs=10,
+                        batch_size=32,
+                        validation_data=(x_val, y_val))
+    model.save_weights('pre_trained_glove_model.h5')
+    return model, history
+
+model, history = train_and_eval3(max_words, embedding_dim, maxlen, embedding_matrix)
+
+
+# 
+# plot
+# 
+import matplotlib.pyplot as plt
+
+acc      = history.history['acc']
+val_acc  = history.history['val_acc']
+loss     = history.history['loss']
+val_loss = history.history['val_loss']
+
+epochs = range(1, len(acc) + 1)
+
+plt.plot(epochs, acc, 'bo', label='Training acc')
+plt.plot(epochs, val_acc, 'b', label='Validation acc')
+plt.title('Training and validation accuracy')
+plt.legend()
+
+plt.figure()
+
+plt.plot(epochs, loss, 'bo', label='Training loss')
+plt.plot(epochs, val_loss, 'b', label='Validation loss')
+plt.title('Training and validation loss')
+plt.legend()
+
+plt.show()
+
