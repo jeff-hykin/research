@@ -136,7 +136,7 @@ def add_pre_trained_embedding(model):
 # 
 def train_network(max_words, maxlen, initial_training):
     if initial_training:
-        data_amount = 1000
+        data_amount = 5000
     else:
         data_amount = len(x_train)
     
