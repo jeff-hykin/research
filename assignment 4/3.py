@@ -57,8 +57,8 @@ def tokenize():
     from keras.preprocessing.sequence import pad_sequences
     import numpy as np
 
-    maxlen             = 10000  # We will cut reviews after 100 words
-    max_words          = 10000  # We will only consider the top 10, 000 words in the dataset
+    maxlen             = 130  # We will cut reviews after 100 words
+    max_words          = 6000  # We will only consider the top 10, 000 words in the dataset
     training_samples   = 10000
     validation_samples = 10000
 
@@ -120,7 +120,7 @@ print('Found %s word vectors.' % len(embeddings_index))
 # 
 def add_pre_trained_embedding(model):
     global embeddings_index, max_words, maxlen
-    embedding_dim = 100
+    embedding_dim = 128
     embedding_matrix = np.zeros((max_words, embedding_dim))
     for word, i in word_index.items():
         embedding_vector = embeddings_index.get(word)
@@ -141,7 +141,7 @@ def train_network(max_words, maxlen, initial_training):
         data_amount = len(x_train)
     
     from keras.models import Sequential
-    from keras.layers import Embedding, Flatten, Dense
+    from keras.layers import Embedding, Flatten, Dense, Conv1D, MaxPooling1D
     from keras import layers
     
 
@@ -150,16 +150,14 @@ def train_network(max_words, maxlen, initial_training):
     add_pre_trained_embedding(model)
     if initial_training:
         model.layers[0].trainable = False
+    else:
+        model.layers[0].trainable = True
     
-    model.add(Flatten())
-    model.add(layers.Dense(128, activation='relu'))
-    model.add(layers.Dropout(0.5))
-    model.add(layers.Dense(32, activation='relu'))
-    model.add(layers.Dropout(0.5))
-    model.add(layers.Dense(16, activation='relu'))
+    model.add(Conv1D(kernel_size=10, activation='relu', filters=25))
+    model.add(MaxPooling1D(3))
+    model.add(layers.Dense(20, activation='relu'))
+    model.add(layers.Dropout(0.05))
     model.add(layers.Dense(1, activation='sigmoid'))
-    model.compile(optimizer='rmsprop', loss='binary_crossentropy', metrics=['acc'])
-    model.add(Dense(1, activation='sigmoid'))
     
     if not initial_training:
         model.load_weights("pre_trained_glove_model.nosync.h5")
@@ -172,7 +170,7 @@ def train_network(max_words, maxlen, initial_training):
         x_train[:data_amount],
         y_train[:data_amount],
         epochs=20,
-        batch_size=32,
+        batch_size=100,
         validation_data=(x_val, y_val)
     )
     if initial_training:
