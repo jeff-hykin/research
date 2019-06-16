@@ -120,7 +120,7 @@ print('Found %s word vectors.' % len(embeddings_index))
 # 
 def add_pre_trained_embedding(model):
     global embeddings_index, max_words, maxlen
-    embedding_dim = 128
+    embedding_dim = 100
     embedding_matrix = np.zeros((max_words, embedding_dim))
     for word, i in word_index.items():
         embedding_vector = embeddings_index.get(word)
