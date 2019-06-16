@@ -10,7 +10,7 @@ from os import remove, getcwd, makedirs, listdir, rename, rmdir
 # allow relative imports, see https://stackoverflow.com/a/11158224/4367134
 import os, sys, inspect
 sys.path.insert(1, os.path.join(sys.path[0], '..'))
-from common_tools import cache_model_as, cache_output_as, easy_download
+from common_tools import cache_model_as, cache_output_as, easy_download, plot
 
 
 #
@@ -169,25 +169,4 @@ model, history = train_and_eval3(
 #
 # plot
 #
-import matplotlib.pyplot as plt
-
-acc = history.history['acc']
-val_acc = history.history['val_acc']
-loss = history.history['loss']
-val_loss = history.history['val_loss']
-
-epochs = range(1, len(acc) + 1)
-
-plt.plot(epochs, acc, 'bo', label='Training acc')
-plt.plot(epochs, val_acc, 'b', label='Validation acc')
-plt.title('Training and validation accuracy')
-plt.legend()
-
-plt.figure()
-
-plt.plot(epochs, loss, 'bo', label='Training loss')
-plt.plot(epochs, val_loss, 'b', label='Validation loss')
-plt.title('Training and validation loss')
-plt.legend()
-
-plt.show()
+plot(history)
