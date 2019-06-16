@@ -132,7 +132,7 @@ def add_embedding(model):
     model.layers[-1].set_weights([embedding_matrix])
     
 
-@cache_model_as("a4-train_and_eval3", skip=True)
+@cache_model_as("a4-train_and_eval3")
 def train_and_eval3(max_words, maxlen):
     from keras.models import Sequential
     from keras.layers import Embedding, Flatten, Dense
