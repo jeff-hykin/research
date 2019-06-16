@@ -145,7 +145,7 @@ def tokenize():
     y_train = labels[:training_samples]
     x_val = data[training_samples: training_samples + validation_samples]
     y_val = labels[training_samples: training_samples + validation_samples]
-    return (x_train, y_train, x_val, y_val, max_words)
+    return (x_train, y_train, x_val, max_words)
 
 x_train, y_train, x_val, y_val, max_words = tokenize()
 
