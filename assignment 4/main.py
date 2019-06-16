@@ -147,3 +147,14 @@ def tokenize():
     return x_train, y_train, x_val, y_val
 
 x_train, y_train, x_val, y_val = tokenize()
+
+# 
+# get the glove data
+# 
+glove_data = "glove.nosync.6B"
+if not exists(join(dirname(__file__),glove_data)):
+    easy_download(
+        url="http://nlp.stanford.edu/data/glove.6B.zip",
+        destination_folder=dirname(__file__),
+        new_name=f"{glove_data}.zip"
+    )
