@@ -112,6 +112,7 @@ def make_sure_containing_folder_exists(a_path):
     print('a_path = ', a_path)
     parent_folder = dirname(a_path)
     print('parent_folder = ', parent_folder)
+    exit()
     # create the data folder if it doesnt exist
     if not exists(parent_folder):
         os.makedirs(parent_folder)
