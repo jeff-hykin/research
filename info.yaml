@@ -16,6 +16,8 @@
             git fetch; git pull; python3 assignment\ 4/2.py
         "4-3":
             git fetch; git pull; python3 assignment\ 4/3.py
+        "4-4":
+            git fetch; git pull; python3 assignment\ 4/4.py
             
     dependencies: &dependencies
         atk: 0.0.1
