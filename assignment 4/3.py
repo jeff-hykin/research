@@ -142,6 +142,7 @@ def train_network(max_words, maxlen, initial_training):
     
     from keras.models import Sequential
     from keras.layers import Embedding, Flatten, Dense
+    from keras import layers
     
 
     model = Sequential()
