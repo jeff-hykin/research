@@ -107,7 +107,7 @@ def get_imdb_data_manually():
 # 
 # tokenize
 # 
-@cache_output_as(".cache/imdb_train_and_validate")
+@cache_output_as(".cache/imdb_train_and_validate", skip=True)
 def tokenize():
     labels, texts = get_imdb_data_manually()
     
@@ -145,13 +145,9 @@ def tokenize():
     y_train = labels[:training_samples]
     x_val = data[training_samples: training_samples + validation_samples]
     y_val = labels[training_samples: training_samples + validation_samples]
-    output = (x_train, y_train, x_val, y_val, max_words)
-    print('len(output) = ', len(output))
-    return output
+    return x_train, y_train, x_val, y_val, maxlen, training_samples, validation_samples, max_words
 
-input_ = tokenize()
-print('len(input_) = ', len(input_))
-x_train, y_train, x_val, y_val, max_words = input_
+x_train, y_train, x_val, y_val, maxlen, training_samples, validation_samples, max_words = tokenize()
 
 # 
 # get the glove data
