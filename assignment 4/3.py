@@ -57,7 +57,7 @@ def tokenize():
     from keras.preprocessing.sequence import pad_sequences
     import numpy as np
 
-    maxlen             = 100  # We will cut reviews after 100 words
+    maxlen             = 10000  # We will cut reviews after 100 words
     max_words          = 10000  # We will only consider the top 10, 000 words in the dataset
     training_samples   = 10000
     validation_samples = 10000
@@ -152,7 +152,10 @@ def train_network(max_words, maxlen, initial_training):
         model.layers[0].trainable = False
     
     model.add(Flatten())
-    model.add(layers.Dense(16, activation='relu'))
+    model.add(layers.Dense(128, activation='relu'))
+    model.add(layers.Dropout(0.5))
+    model.add(layers.Dense(32, activation='relu'))
+    model.add(layers.Dropout(0.5))
     model.add(layers.Dense(16, activation='relu'))
     model.add(layers.Dense(1, activation='sigmoid'))
     model.compile(optimizer='rmsprop', loss='binary_crossentropy', metrics=['acc'])
@@ -168,7 +171,7 @@ def train_network(max_words, maxlen, initial_training):
     history = model.fit(
         x_train[:data_amount],
         y_train[:data_amount],
-        epochs=15,
+        epochs=20,
         batch_size=32,
         validation_data=(x_val, y_val)
     )
