@@ -2,7 +2,7 @@ import numpy as np
 from keras.datasets import imdb
 from keras import preprocessing
 from keras.models import Sequential
-from keras.layers import Flatten, Dense, Embedding
+from keras.layers import Flatten, Dense, Embedding, SimpleRNN
 from os.path import isabs, isfile, isdir, join, dirname, basename, exists, splitext
 from os import remove, getcwd, makedirs, listdir, rename, rmdir
 # allow relative imports, see https://stackoverflow.com/a/11158224/4367134
