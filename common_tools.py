@@ -6,6 +6,7 @@ from os.path import isabs, isfile, isdir, join, dirname, basename, exists, split
 from os import remove, getcwd, makedirs, listdir, rename, rmdir
 from shutil import move
 from keras.models import load_model
+import inspect
 import tempfile
 import tarfile    
 
@@ -179,6 +180,7 @@ def cache_output_as(name_of_data, skip=False):
             
             # check if data was already saved
             from os.path import isfile
+            import inspect
             import os
             
             data_path          = name_of_data + ".pickle"
