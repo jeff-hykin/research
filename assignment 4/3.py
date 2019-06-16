@@ -49,7 +49,7 @@ def get_imdb_data_manually():
 #
 # tokenize imdb data
 #
-@cache_output_as(".cache/imdb_train_and_validate", skip=True)
+# @cache_output_as(".cache/imdb_train_and_validate", skip=True)
 def tokenize():
     labels, texts = get_imdb_data_manually()
 
@@ -59,7 +59,6 @@ def tokenize():
 
     maxlen             = 100  # We will cut reviews after 100 words
     max_words          = 10000  # We will only consider the top 10, 000 words in the dataset
-    training_samples   = 10000
     validation_samples = 10000
 
     tokenizer = Tokenizer(num_words=max_words)
@@ -83,10 +82,10 @@ def tokenize():
     data   = data  [indices]
     labels = labels[indices]
 
-    x_train = data  [:training_samples]
-    y_train = labels[:training_samples]
-    x_val   = data  [training_samples:training_samples + validation_samples]
-    y_val   = labels[training_samples:training_samples + validation_samples]
+    x_val   = data  [:validation_samples]
+    y_val   = labels[:validation_samples]
+    x_train = data  [validation_samples:]
+    y_train = labels[validation_samples:]
     return x_train, y_train, x_val, y_val, maxlen, training_samples, validation_samples, max_words, word_index
 
 
