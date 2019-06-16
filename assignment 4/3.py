@@ -34,6 +34,7 @@ model = Sequential()
 model.add(Embedding(max_features, 32))
 model.add(SimpleRNN(32))
 model.add(Dense(1, activation='sigmoid'))
+model.summary()
 
 model.compile(optimizer='rmsprop', loss='binary_crossentropy', metrics=['acc'])
 history = model.fit(

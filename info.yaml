@@ -6,17 +6,19 @@
     commands: &commands # if you dont know what the & means, see https://blog.daemonl.com/2016/02/yaml.html
         setup: 
             python3 setup/word2vec.py;
-        "2-imbd": |
+        2-imbd: |
             git fetch; git pull; python3 assignment\ 2/imdb/imbd.py
         "3": |
             git fetch; git pull; python3 assignment\ 3/main.py
         "4": |
             git fetch; git pull; python3 assignment\ 4/main.py
-        "4-2":
+        4-2:
             git fetch; git pull; python3 assignment\ 4/2.py
-        "4-3":
+        4-3:
             git fetch; git pull; python3 assignment\ 4/3.py
-        "4-4":
+        4-4:
+            git fetch; git pull; python3 assignment\ 4/4.py
+        4-5:
             git fetch; git pull; python3 assignment\ 4/4.py
             
     dependencies: &dependencies
