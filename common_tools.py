@@ -283,7 +283,6 @@ def easy_download(url, destination_folder, new_name):
     # auto extract it
     # 
     base, extension1 = splitext(destination_path)
-    print('extension1 = ', extension1)
     if extension1 == ".gz":
         base2, extension2 = splitext(base)
         if extension2 == ".tar":
