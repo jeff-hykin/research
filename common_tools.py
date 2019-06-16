@@ -194,7 +194,7 @@ def cache_output_as(name_of_data, skip=False):
                     function_contents = file.read()
                 # check to see if the source has changed
                 source = inspect.getsource(function_getting_wrapped)
-                if souce == function_contents:
+                if source == function_contents:
                     print(f"loading {name_of_data} from local files\n\n")
                     data = large_pickle_load(data_path)
                     # data was loaded so no need to save
