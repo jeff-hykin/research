@@ -151,7 +151,12 @@ def train_network(max_words, maxlen, initial_training):
         model.layers[0].trainable = False
     
     model.add(Flatten())
-    model.add(Dense(32, activation='relu'))
+    model.add(layers.Dense(32, activation='relu'))
+    model.add(layers.Dropout(0.5))
+    model.add(layers.Dense(32, activation='relu'))
+    model.add(layers.Dropout(0.5))
+    model.add(layers.Dense(1, activation='sigmoid'))
+    model.compile(optimizer='rmsprop', loss='binary_crossentropy', metrics=['acc'])
     model.add(Dense(1, activation='sigmoid'))
     
     if not initial_training:
