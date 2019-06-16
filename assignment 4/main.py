@@ -77,11 +77,12 @@ model, history = train(x_train, y_train, max_num_of_unique_words, max_num_of_wor
 def get_imdb_data_manually():
     database_folder_name = "imdb_database.nosync"
     
-    easy_download(
-        url="http://ai.stanford.edu/~amaas/data/sentiment/aclImdb_v1.tar.gz",
-        destination_folder=dirname(__file__),
-        new_name=f"{database_folder_name}.tar.gz"
-    )
+    if not exists(join(dirname(__file__),database_folder_name)):
+        easy_download(
+            url="http://ai.stanford.edu/~amaas/data/sentiment/aclImdb_v1.tar.gz",
+            destination_folder=dirname(__file__),
+            new_name=f"{database_folder_name}.tar.gz"
+        )
 
     imdb_dir = join(dirname(__file__), database_folder_name)
     train_dir = join(imdb_dir, 'train')
