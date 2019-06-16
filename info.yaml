@@ -7,7 +7,10 @@
         setup: 
             python3 setup/word2vec.py;
         "3": |
-            cd ~/Programming/research/; git fetch; git pull; python3 ~/Programming/research/assignment\ 3/main.py
+            git fetch; git pull; python3 ~/Programming/research/assignment\ 3/main.py
+        "4": |
+            git fetch; git pull; python3 ~/Programming/research/assignment\ 4/main.py
+            
     dependencies: &dependencies
         atk: 0.0.1
         python3: 3.7.3
