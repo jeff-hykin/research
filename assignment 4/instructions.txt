@@ -1,0 +1,26 @@
+Embedding layer
+    code
+    screenshot
+Word2Vec
+    glove
+    word2vec
+
+an embedding layer
+a Simple RNN layer
+and a fully-connected layer 
+    Each layer outputs a tensor of a certain shape.
+    What are their shapes during training?
+    Why are they this way?
+
+an embedding layer
+an LSTM layer
+and a fully-connected layer 
+    code
+    screenshot
+
+what is the proper way to use dropout in an RNN?
+see Section 6.3.6
+
+1d CNN
+    code 
+    screenshots
