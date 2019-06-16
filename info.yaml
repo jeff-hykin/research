@@ -10,6 +10,8 @@
             git fetch; git pull; python3 ~/Programming/research/assignment\ 3/main.py
         "4": |
             git fetch; git pull; python3 ~/Programming/research/assignment\ 4/main.py
+        "4-2":
+            git fetch; git pull; python3 ~/Programming/research/assignment\ 4/2.py
             
     dependencies: &dependencies
         atk: 0.0.1

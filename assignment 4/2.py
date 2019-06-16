@@ -8,17 +8,18 @@ from keras.layers import Flatten, Dense, Embedding
 from os.path import isabs, isfile, isdir, join, dirname, basename, exists, splitext
 from os import remove, getcwd, makedirs, listdir, rename, rmdir
 # allow relative imports, see https://stackoverflow.com/a/11158224/4367134
-import os,sys,inspect
+import os, sys, inspect
 sys.path.insert(1, os.path.join(sys.path[0], '..'))
 from common_tools import cache_model_as, cache_output_as, easy_download
 
-# 
-# Get the data manually
-# 
+
+#
+# Get the imbd data manually
+#
 def get_imdb_data_manually():
     database_folder_name = "imdb_database.nosync"
-    
-    if not exists(join(dirname(__file__),database_folder_name)):
+
+    if not exists(join(dirname(__file__), database_folder_name)):
         easy_download(
             url="http://ai.stanford.edu/~amaas/data/sentiment/aclImdb_v1.tar.gz",
             destination_folder=dirname(__file__),
@@ -44,13 +45,14 @@ def get_imdb_data_manually():
                     labels.append(1)
     return labels, texts
 
-# 
-# tokenize
-# 
+
+#
+# tokenize imdb data
+#
 @cache_output_as(".cache/imdb_train_and_validate", skip=True)
 def tokenize():
     labels, texts = get_imdb_data_manually()
-    
+
     from keras.preprocessing.text import Tokenizer
     from keras.preprocessing.sequence import pad_sequences
     import numpy as np
@@ -83,17 +85,18 @@ def tokenize():
 
     x_train = data[:training_samples]
     y_train = labels[:training_samples]
-    x_val = data[training_samples: training_samples + validation_samples]
-    y_val = labels[training_samples: training_samples + validation_samples]
+    x_val = data[training_samples:training_samples + validation_samples]
+    y_val = labels[training_samples:training_samples + validation_samples]
     return x_train, y_train, x_val, y_val, maxlen, training_samples, validation_samples, max_words, word_index
+
 
 x_train, y_train, x_val, y_val, maxlen, training_samples, validation_samples, max_words, word_index = tokenize()
 
-# 
+#
 # get the glove data
-# 
+#
 glove_data = "glove.nosync.6B"
-if not exists(join(dirname(__file__),glove_data)):
+if not exists(join(dirname(__file__), glove_data)):
     easy_download(
         url="http://nlp.stanford.edu/data/glove.6B.zip",
         destination_folder=dirname(__file__),
@@ -112,16 +115,22 @@ f.close()
 print('Found %s word vectors.' % len(embeddings_index))
 
 
-
-embedding_dim = 100
-
-embedding_matrix = np.zeros((max_words, embedding_dim))
-for word, i in word_index.items():
-    embedding_vector = embeddings_index.get(word)
-    if i < max_words:
-        if embedding_vector is not None:
-            # Words not found in embedding index will be all-zeros.
-            embedding_matrix[i] = embedding_vector
+# 
+# Create the embedding layer
+# 
+def add_embedding(model):
+    global embeddings_index, max_words, maxlen
+    embedding_dim = 100
+    embedding_matrix = np.zeros((max_words, embedding_dim))
+    for word, i in word_index.items():
+        embedding_vector = embeddings_index.get(word)
+        if i < max_words:
+            if embedding_vector is not None:
+                # Words not found in embedding index will be all-zeros.
+                embedding_matrix[i] = embedding_vector
+    model.add(Embedding(max_words, embedding_dim, input_length=maxlen))
+    model.layers[-1].set_weights([embedding_matrix])
+    
 
 @cache_model_as("a4-train_and_eval3")
 def train_and_eval3(max_words, embedding_dim, maxlen, embedding_matrix):
@@ -129,20 +138,16 @@ def train_and_eval3(max_words, embedding_dim, maxlen, embedding_matrix):
     from keras.layers import Embedding, Flatten, Dense
 
     model = Sequential()
-    model.add(Embedding(max_words, embedding_dim, input_length=maxlen))
+    
+    add_embedding(model)
+    model.layers[0].trainable = False
     model.add(Flatten())
     model.add(Dense(32, activation='relu'))
     model.add(Dense(1, activation='sigmoid'))
+    
     model.summary()
-
-
-    model.layers[0].set_weights([embedding_matrix])
-    model.layers[0].trainable = False
-
     model.compile(
-        optimizer='rmsprop',
-        loss='binary_crossentropy',
-        metrics=['acc']
+        optimizer='rmsprop', loss='binary_crossentropy', metrics=['acc']
     )
     history = model.fit(
         x_train,
@@ -154,17 +159,19 @@ def train_and_eval3(max_words, embedding_dim, maxlen, embedding_matrix):
     model.save_weights('pre_trained_glove_model.h5')
     return model, history
 
-model, history = train_and_eval3(max_words, embedding_dim, maxlen, embedding_matrix)
 
+model, history = train_and_eval3(
+    max_words, embedding_dim, maxlen, embedding_matrix
+)
 
-# 
+#
 # plot
-# 
+#
 import matplotlib.pyplot as plt
 
-acc      = history.history['acc']
-val_acc  = history.history['val_acc']
-loss     = history.history['loss']
+acc = history.history['acc']
+val_acc = history.history['val_acc']
+loss = history.history['loss']
 val_loss = history.history['val_loss']
 
 epochs = range(1, len(acc) + 1)
@@ -182,7 +189,3 @@ plt.title('Training and validation loss')
 plt.legend()
 
 plt.show()
-
-
-
-
