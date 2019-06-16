@@ -7,7 +7,7 @@
         setup: 
             python3 setup/word2vec.py;
         "2-imdb": |
-            git fetch; git pull; python3 assignment\ 2/imbd/imbd.py
+            git fetch; git pull; python3 assignment\ 2/imdb/imbd.py
         "3": |
             git fetch; git pull; python3 assignment\ 3/main.py
         "4": |
