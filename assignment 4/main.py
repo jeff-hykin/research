@@ -7,7 +7,7 @@ from keras.layers import Flatten, Dense, Embedding
 # allow relative imports, see https://stackoverflow.com/a/11158224/4367134
 import os,sys,inspect
 sys.path.insert(1, os.path.join(sys.path[0], '..'))
-from common_tools import cache_model_as
+from common_tools import cache_model_as, cache_output_as, easy_download
 
 
 # 
@@ -66,4 +66,36 @@ def train(x_train, y_train, max_num_of_unique_words, max_num_of_words_in_a_revie
     return model, history
 model, history = train(x_train, y_train, max_num_of_unique_words, max_num_of_words_in_a_review)
 
+
+# 
+# Get the data manually
+# 
+def get_imdb_data_manually():
+    database_folder_name = "imdb_database.nosync"
+    
+    easy_download(
+        url="http://ai.stanford.edu/~amaas/data/sentiment/aclImdb_v1.tar.gz",
+        destination_folder=dirname(__file__),
+        new_name=f"{database_folder_name}.tar.gz"
+    )
+
+    imdb_dir = join(dirname(__file__), database_folder_name)
+    train_dir = join(imdb_dir, 'train')
+
+    labels = []
+    texts = []
+
+    for label_type in ['neg', 'pos']:
+        dir_name = os.path.join(train_dir, label_type)
+        for fname in os.listdir(dir_name):
+            if fname[-4:] == '.txt':
+                f = open(os.path.join(dir_name, fname))
+                texts.append(f.read())
+                f.close()
+                if label_type == 'neg':
+                    labels.append(0)
+                else:
+                    labels.append(1)
+    return labels, texts
+labels, texts = get_imdb_data_manually()
 
