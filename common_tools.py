@@ -181,16 +181,25 @@ def cache_output_as(name_of_data, skip=False):
             from os.path import isfile
             import os
             
-            data_path = name_of_data + ".nosync.pickle"
+            data_path          = name_of_data + ".pickle"
+            func_contents_path = name_of_data + ".function_contents.txt"
             make_sure_containing_folder_exists(data_path)
             
-            # if both files exist, then load them
-            if isfile(data_path) and not skip:
-                print(f"loading {name_of_data} from local files\n\n")
-                data = large_pickle_load(data_path)
+            should_save = True
+            # if the file exists
+            if isfile(data_path) and isfile(func_contents_path) and not skip:
+                with open(func_contents_path, 'r') as file:
+                    function_contents = file.read()
+                # check to see if the source has changed
+                source = inspect.getsource(function_getting_wrapped)
+                if souce == function_contents:
+                    print(f"loading {name_of_data} from local files\n\n")
+                    data = large_pickle_load(data_path)
+                    # data was loaded so no need to save
+                    should_save = False
 
             # if the data doesn't exist yet
-            else:
+            if should_save:
                 print(f'running function {name_of_data}\n\n')
                 # run the function to get the model
                 data = function_getting_wrapped(*args, **kwargs)
@@ -198,6 +207,10 @@ def cache_output_as(name_of_data, skip=False):
                 print(f'saving data {name_of_data}\n\n')
                 # save the data using pickle
                 large_pickle_save(data, data_path)
+                # save the function's contents
+                f = open(func_contents_path, "w")
+                f.write(inspect.getsource(function_getting_wrapped))
+                f.close()
                 
             # return the trained model
             return data
