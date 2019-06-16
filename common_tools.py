@@ -269,9 +269,11 @@ def easy_download(url, destination_folder, new_name):
     match = re.match(r'(https?:)?drive\.google\.com\/file\/.+?\/(?P<id>.+?)\/',url)
     # if its a google drive url, then extract the id and use it
     if match != None:
+        print("downloading the file from google drive")
         download_file_from_google_drive(match.groups('id'), destination)
     # if its a normal url
     else:
+        print("downloading the file")
         download(url, destination_path)
     
     # 
@@ -283,8 +285,10 @@ def easy_download(url, destination_folder, new_name):
         if extension2 == ".tar":
             base = base2
         # move everything to a containing folder
+        print("untaring the file")
         untar(destination_path, base)
-    elif extension2 == ".zip":
+    elif extension1 == ".zip":
+        print("unzipping the file")
         import zipfile
         zip_ref = zipfile.ZipFile(destination_path, 'r')
         zip_ref.extractall(base)
