@@ -147,7 +147,7 @@ def tokenize():
     y_val = labels[training_samples: training_samples + validation_samples]
     return (x_train, y_train, x_val, max_words)
 
-x_train, y_train, x_val, y_val, max_words = tokenize()
+x_train, y_train, x_val, max_words = tokenize()
 
 # 
 # get the glove data
