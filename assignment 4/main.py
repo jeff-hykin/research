@@ -106,7 +106,7 @@ def get_imdb_data_manually():
 # tokenize
 # 
 @cache_output_as(".cache/imdb_train_and_validate")
-def tokenize(labels):
+def tokenize():
     labels, texts = get_imdb_data_manually()
     
     from keras.preprocessing.text import Tokenizer
@@ -145,4 +145,4 @@ def tokenize(labels):
     y_val = labels[training_samples: training_samples + validation_samples]
     return x_train, y_train, x_val, y_val
 
-x_train, y_train, x_val, y_val = tokenize(labels)
+x_train, y_train, x_val, y_val = tokenize()
