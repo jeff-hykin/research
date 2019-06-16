@@ -39,6 +39,7 @@ def get_imdb_data(max_num_of_unique_words, max_num_of_words_in_a_review):
     x_test = preprocessing.sequence.pad_sequences(x_test, maxlen=max_num_of_words_in_a_review)
     
     return (x_train, y_train), (x_test, y_test)
+
 (x_train, y_train), (x_test, y_test) = get_imdb_data(max_num_of_unique_words, max_num_of_words_in_a_review)
 
 #
@@ -66,6 +67,7 @@ def train(x_train, y_train, max_num_of_unique_words, max_num_of_words_in_a_revie
         x_train, y_train, epochs=10, batch_size=32, validation_split=0.2
     )
     return model, history
+
 model, history = train(x_train, y_train, max_num_of_unique_words, max_num_of_words_in_a_review)
 
 
@@ -99,5 +101,48 @@ def get_imdb_data_manually():
                 else:
                     labels.append(1)
     return labels, texts
-labels, texts = get_imdb_data_manually()
 
+# 
+# tokenize
+# 
+@cache_output_as(".cache/imdb_train_and_validate")
+def tokenize(labels):
+    labels, texts = get_imdb_data_manually()
+    
+    from keras.preprocessing.text import Tokenizer
+    from keras.preprocessing.sequence import pad_sequences
+    import numpy as np
+
+    maxlen             = 100  # We will cut reviews after 100 words
+    training_samples   = 200  # We will be training on 200 samples
+    validation_samples = 10000  # We will be validating on 10000 samples
+    max_words          = 10000  # We will only consider the top 10, 000 words in the dataset
+
+    tokenizer = Tokenizer(num_words=max_words)
+    tokenizer.fit_on_texts(texts)
+    sequences = tokenizer.texts_to_sequences(texts)
+
+    word_index = tokenizer.word_index
+    print('Found %s unique tokens.' % len(word_index))
+
+    data = pad_sequences(sequences, maxlen=maxlen)
+
+    labels = np.asarray(labels)
+    print('Shape of data tensor:', data.shape)
+    print('Shape of label tensor:', labels.shape)
+
+    # Split the data into a training set and a validation set
+    # But first, shuffle the data, since we started from data
+    # where sample are ordered (all negative first, then all positive).
+    indices = np.arange(data.shape[0])
+    np.random.shuffle(indices)
+    data = data[indices]
+    labels = labels[indices]
+
+    x_train = data[:training_samples]
+    y_train = labels[:training_samples]
+    x_val = data[training_samples: training_samples + validation_samples]
+    y_val = labels[training_samples: training_samples + validation_samples]
+    return x_train, y_train, x_val, y_val
+
+x_train, y_train, x_val, y_val = tokenize(labels)
