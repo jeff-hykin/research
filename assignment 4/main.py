@@ -151,10 +151,21 @@ x_train, y_train, x_val, y_val = tokenize()
 # 
 # get the glove data
 # 
-glove_data = "glove.nosync.6B"
-if not exists(join(dirname(__file__),glove_data)):
+glove_dir = "glove.nosync.6B"
+if not exists(join(dirname(__file__),glove_dir)):
     easy_download(
         url="http://nlp.stanford.edu/data/glove.6B.zip",
         destination_folder=dirname(__file__),
-        new_name=f"{glove_data}.zip"
+        new_name=f"{glove_dir}.zip"
     )
+
+embeddings_index = {}
+f = open(join(glove_dir, 'glove.6B.100d.txt'))
+for line in f:
+    values = line.split()
+    word = values[0]
+    coefs = np.asarray(values[1:], dtype='float32')
+    embeddings_index[word] = coefs
+f.close()
+
+print('Found %s word vectors.' % len(embeddings_index))
