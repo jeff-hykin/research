@@ -58,9 +58,9 @@ def tokenize():
     import numpy as np
 
     maxlen             = 100  # We will cut reviews after 100 words
-    training_samples   = 200  # We will be training on 200 samples
-    validation_samples = 10000  # We will be validating on 10000 samples
     max_words          = 10000  # We will only consider the top 10, 000 words in the dataset
+    training_samples   = 10000
+    validation_samples = 10000
 
     tokenizer = Tokenizer(num_words=max_words)
     tokenizer.fit_on_texts(texts)
@@ -80,13 +80,13 @@ def tokenize():
     # where sample are ordered (all negative first, then all positive).
     indices = np.arange(data.shape[0])
     np.random.shuffle(indices)
-    data = data[indices]
+    data   = data  [indices]
     labels = labels[indices]
 
-    x_train = data[:training_samples]
+    x_train = data  [:training_samples]
     y_train = labels[:training_samples]
-    x_val = data[training_samples:training_samples + validation_samples]
-    y_val = labels[training_samples:training_samples + validation_samples]
+    x_val   = data  [training_samples:training_samples + validation_samples]
+    y_val   = labels[training_samples:training_samples + validation_samples]
     return x_train, y_train, x_val, y_val, maxlen, training_samples, validation_samples, max_words, word_index
 
 
@@ -132,62 +132,88 @@ def add_pre_trained_embedding(model):
     model.layers[-1].set_weights([embedding_matrix])
 
 # 
-# create model with fixed pretrained embedding
+# create model for both the pre trained an normal train modes
 # 
-@cache_model_as("a4-train_and_eval4")
-def train_and_eval3(max_words, maxlen):
+@cache_model_as("a4-frozen_pretrain")
+def train_network(max_words, maxlen, initial_training):
+    if initial_training:
+        data_amount = 1000
+    else:
+        data_amount = len(x_train)
+    
     from keras.models import Sequential
     from keras.layers import Embedding, Flatten, Dense
+    
 
     model = Sequential()
     
     add_pre_trained_embedding(model)
-    # model.layers[0].trainable = False
+    if initial_training:
+        model.layers[0].trainable = False
+    
     model.add(Flatten())
     model.add(Dense(32, activation='relu'))
     model.add(Dense(1, activation='sigmoid'))
+    
+    if not initial_training:
+        model.load_weights("pre_trained_glove_model.h5")
     
     model.summary()
     model.compile(
         optimizer='rmsprop', loss='binary_crossentropy', metrics=['acc']
     )
     history = model.fit(
-        x_train,
-        y_train,
+        x_train[:data_amount],
+        y_train[:data_amount],
         epochs=10,
         batch_size=32,
         validation_data=(x_val, y_val)
     )
-    model.save_weights('pre_trained_glove_model.h5')
+    if initial_training:
+        model.save_weights('pre_trained_glove_model.h5')
+    else:
+        model.save_weights('mix_trained_glove_model.h5')
+    
     return model, history
 
+#
+# create plotting tool
+#
+def plot(history):
+    import matplotlib.pyplot as plt
 
-model, history = train_and_eval3(
-    max_words, maxlen
+    acc      = history.history['acc']
+    val_acc  = history.history['val_acc']
+    loss     = history.history['loss']
+    val_loss = history.history['val_loss']
+
+    epochs = range(1, len(acc) + 1)
+
+    plt.plot(epochs, acc, 'bo', label='Training acc')
+    plt.plot(epochs, val_acc, 'b', label='Validation acc')
+    plt.title('Training and validation accuracy')
+    plt.legend()
+
+    plt.figure()
+
+    plt.plot(epochs, loss, 'bo', label='Training loss')
+    plt.plot(epochs, val_loss, 'b', label='Validation loss')
+    plt.title('Training and validation loss')
+    plt.legend()
+
+    plt.show()
+
+# 
+# run training
+# 
+model, history = train_network(
+    max_words, maxlen, initial_training=True
 )
-
-#
-# plot
-#
-import matplotlib.pyplot as plt
-
-acc = history.history['acc']
-val_acc = history.history['val_acc']
-loss = history.history['loss']
-val_loss = history.history['val_loss']
-
-epochs = range(1, len(acc) + 1)
-
-plt.plot(epochs, acc, 'bo', label='Training acc')
-plt.plot(epochs, val_acc, 'b', label='Validation acc')
-plt.title('Training and validation accuracy')
-plt.legend()
-
-plt.figure()
-
-plt.plot(epochs, loss, 'bo', label='Training loss')
-plt.plot(epochs, val_loss, 'b', label='Validation loss')
-plt.title('Training and validation loss')
-plt.legend()
-
-plt.show()
+print(" After initial training ")
+plot(history)
+# train the final one
+model, history = train_network(
+    max_words, maxlen, initial_training=False
+)
+print(" After final training ")
+plot(history)
