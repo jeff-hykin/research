@@ -1,5 +1,6 @@
 # TODO: put all the imports and knobs at the top
 
+import numpy as np
 from keras.datasets import imdb
 from keras import preprocessing
 from keras.models import Sequential
