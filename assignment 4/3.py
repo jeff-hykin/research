@@ -154,14 +154,15 @@ def train_network(max_words, maxlen, initial_training):
     model.add(Flatten())
     model.add(layers.Dense(32, activation='relu'))
     model.add(layers.Dropout(0.5))
-    model.add(layers.Dense(32, activation='relu'))
-    model.add(layers.Dropout(0.5))
+    model.add(layers.Dense(16, activation='relu'))
+    model.add(layers.Dropout(0.3))
+    model.add(layers.Dense(16, activation='relu'))
     model.add(layers.Dense(1, activation='sigmoid'))
     model.compile(optimizer='rmsprop', loss='binary_crossentropy', metrics=['acc'])
     model.add(Dense(1, activation='sigmoid'))
     
     if not initial_training:
-        model.load_weights("pre_trained_glove_model.h5")
+        model.load_weights("pre_trained_glove_model.nosync.h5")
     
     model.summary()
     model.compile(
@@ -175,9 +176,9 @@ def train_network(max_words, maxlen, initial_training):
         validation_data=(x_val, y_val)
     )
     if initial_training:
-        model.save_weights('pre_trained_glove_model.h5')
+        model.save_weights('pre_trained_glove_model.nosync.h5')
     else:
-        model.save_weights('mix_trained_glove_model.h5')
+        model.save_weights('mix_trained_glove_model.nosync.h5')
     
     return model, history
 
