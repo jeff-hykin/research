@@ -49,7 +49,7 @@ def get_imdb_data_manually():
 #
 # tokenize imdb data
 #
-@cache_output_as(".cache/imdb_train_and_validate", skip=True)
+@cache_output_as(".cache/imdb_train_and_validate")
 def tokenize():
     labels, texts = get_imdb_data_manually()
 
@@ -59,7 +59,7 @@ def tokenize():
 
     maxlen             = 100  # We will cut reviews after 100 words
     max_words          = 10000  # We will only consider the top 10, 000 words in the dataset
-    training_samples   = 15000
+    training_samples   = 10000
     validation_samples = 10000
 
     tokenizer = Tokenizer(num_words=max_words)
@@ -170,7 +170,7 @@ def train_network(max_words, maxlen, initial_training):
     history = model.fit(
         x_train[:data_amount],
         y_train[:data_amount],
-        epochs=10,
+        epochs=15,
         batch_size=32,
         validation_data=(x_val, y_val)
     )
