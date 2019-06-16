@@ -149,6 +149,7 @@ def train_network(max_words, maxlen, initial_training):
     add_pre_trained_embedding(model)
     if initial_training:
         model.layers[0].trainable = False
+    model.layers[0].trainable = False
     
     model.add(Flatten())
     model.add(layers.Dense(32, activation='relu'))
