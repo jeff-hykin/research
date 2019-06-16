@@ -109,7 +109,8 @@ def make_sure_containing_folder_exists(a_path):
     # make abs if its not
     if not isabs(a_path):
         a_path = join(os.getcwd(), a_path)
-    
+    print('a_path = ', a_path)
+    print('parent_folder = ', parent_folder)
     parent_folder = dirname(a_path)
     # create the data folder if it doesnt exist
     if not exists(parent_folder):
