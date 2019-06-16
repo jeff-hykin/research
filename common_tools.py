@@ -202,7 +202,7 @@ def cache_output_as(name_of_data, skip=False):
                 # serialize model to JSON
                 print(f'saving data {name_of_data}\n\n')
                 # save the data using pickle
-                large_pickle_save(other_data, data_path)
+                large_pickle_save(data, data_path)
                 
             # return the trained model
             return data
