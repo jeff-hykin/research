@@ -154,6 +154,7 @@ def train_network(max_words, maxlen, initial_training):
         model.layers[0].trainable = True
     
     model.add(Conv1D(kernel_size=10, activation='relu', filters=25))
+    model.add(Conv1D(kernel_size=10, activation='relu', filters=25))
     model.add(MaxPooling1D(3))
     model.add(Flatten())
     model.add(layers.Dense(20, activation='relu'))
