@@ -9,7 +9,7 @@ from os.path import isabs, isfile, isdir, join, dirname, basename, exists, split
 from os import remove, getcwd, makedirs, listdir, rename, rmdir
 # allow relative imports, see https://stackoverflow.com/a/11158224/4367134
 import os, sys, inspect
-sys.path.insert(1, os.path.join(sys.path[0], '..'))
+sys.path.insert(1, os.path.join(sys.path[0], '../..'))
 from common_tools import cache_model_as, cache_output_as, easy_download, plot
 
 
