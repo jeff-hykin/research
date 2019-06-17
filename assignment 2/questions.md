@@ -9,3 +9,5 @@
 - Where are the number of features specified in a convnet?
 
 - What stops a regular neural network from learning the effective shape of a convolutional network?
+
+- When dealing with RNN dropout, is the mask constant within a single batch, and then changes outside of the batch?
