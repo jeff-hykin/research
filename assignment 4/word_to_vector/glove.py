@@ -112,13 +112,8 @@ for line in f:
     embeddings_index[word] = coefs
 f.close()
 
-embedding_dim = 100
-embedding_matrix = np.zeros((max_words, embedding_dim))
-# for word, i in word_index.items():
-#     embedding_vector = embeddings_index.get(word)
-#     if i < max_words:
-#         if embedding_vector is not None:
-#             # Words not found in embedding index will be all-zeros.
-#             embedding_matrix[i] = embedding_vector
 
-print(embeddings_index.get("hello"))
+
+def get_vector_for(word):
+    global embeddings_index
+    return embeddings_index.get(word)

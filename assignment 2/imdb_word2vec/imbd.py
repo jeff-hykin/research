@@ -9,6 +9,14 @@ from common_tools import vectorize_sequences, google_words, large_pickle_save, l
 # Tools for reshaping data 
 #%%
 # check and see if the data has already been processed
+
+(train_data, train_labels), (test_data, test_labels) = imdb.load_data(num_words=10000)
+
+wv = google_words()
+word_as_vec = wv['hello']
+word_vec_size = len(word_as_vec)
+
+
 word_index = imdb.get_word_index()
 reverse_word_index = dict([(value, key) for (key, value) in word_index.items()] )
 del word_index
