@@ -22,6 +22,8 @@
             git fetch; git pull; python3 assignment\ 4/5.py
         4-lstm:
             git fetch; git pull; python3 assignment\ 4/assignment_answers/4.LSTM/code.py
+        4-cnn:
+            git fetch; git pull; python3 assignment\ 4/assignment_answers/6.1D\ CNN/code.py
             
             
     dependencies: &dependencies
