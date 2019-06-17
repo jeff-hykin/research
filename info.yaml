@@ -10,16 +10,14 @@
             git fetch; git pull; python3 assignment\ 2/imdb/imbd.py
         "3": |
             git fetch; git pull; python3 assignment\ 3/main.py
-        "4": |
-            git fetch; git pull; python3 assignment\ 4/main.py
         4-2:
-            git fetch; git pull; python3 assignment\ 4/2.py
+            git fetch; git pull; python3 assignment\ 4/misc/2.py
         4-3:
-            git fetch; git pull; python3 assignment\ 4/3.py
+            git fetch; git pull; python3 assignment\ 4/misc/3.py
         4-4:
-            git fetch; git pull; python3 assignment\ 4/4.py
+            git fetch; git pull; python3 assignment\ 4/misc/4.py
         4-5:
-            git fetch; git pull; python3 assignment\ 4/5.py
+            git fetch; git pull; python3 assignment\ 4/misc/5.py
         4-lstm:
             git fetch; git pull; python3 assignment\ 4/assignment_answers/4.LSTM/code.py
         4-cnn:
