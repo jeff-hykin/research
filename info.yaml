@@ -19,7 +19,10 @@
         4-4:
             git fetch; git pull; python3 assignment\ 4/4.py
         4-5:
-            git fetch; git pull; python3 assignment\ 4/4.py
+            git fetch; git pull; python3 assignment\ 4/5.py
+        4-lstm:
+            git fetch; git pull; python3 assignment\ 4/assignment_answers/4.LSTM/code.py
+            
             
     dependencies: &dependencies
         atk: 0.0.1

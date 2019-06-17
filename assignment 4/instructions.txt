@@ -4,8 +4,9 @@
 [DONE] Word2Vec
     glove
     word2vec
+ (2) annotated code that, given an embedding vector, can return the nearest word.
 
-an embedding layer
+[DONE] an embedding layer
 a Simple RNN layer
 and a fully-connected layer 
     Each layer outputs a tensor of a certain shape.
@@ -18,9 +19,11 @@ and a fully-connected layer
             simple_rnn_1 (SimpleRNN)     (None, 32)                2080      
             dense_1 (Dense)              (None, 1)                 33        
         The embedding layer outputs a 3D tensor because the keras simple RNN needs:
-            - a dimension for batch size (32)
-            - a dimension for time step (variable, corrisponds to the number of words in a particular review) 
-            - and a dimension for the number of features (number of dimensions per word, which in this case is also 32?)
+            - A dimension for batch size. In this case it would be 128.
+            - A dimension for time step. In this case 500, corrisponds to the number of words in a particular review.
+            - And a dimension for the number of features per word. In this case, is 32.
+        The simple_rnn can be run in two modes, and in this case it is being run in the non-return_sequence mode. This means it is only returning the last output of the sequence, which is a vector of size 32, and since it is doing this for each of 128 samples in the batch, it results in a tensor of (128, 32).
+        The final layer is just a dimension for each sample in the batch, and then one value for the binary classification of that sample.
 
 an embedding layer
 an LSTM layer
@@ -28,8 +31,9 @@ and a fully-connected layer
     code
     screenshot
 
-what is the proper way to use dropout in an RNN?
+[DONE] what is the proper way to use dropout in an RNN?
 see Section 6.3.6
+    The proper way is to create a dropout mask that stays constant throughout each timestep, and also have temporally constant dropout mask for the internal recurrent connections.
 
 1d CNN
     code 

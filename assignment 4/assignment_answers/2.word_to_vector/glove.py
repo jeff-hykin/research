@@ -9,7 +9,7 @@ from os.path import isabs, isfile, isdir, join, dirname, basename, exists, split
 from os import remove, getcwd, makedirs, listdir, rename, rmdir
 # allow relative imports, see https://stackoverflow.com/a/11158224/4367134
 import os, sys, inspect
-sys.path.insert(1, os.path.join(sys.path[0], '..'))
+sys.path.insert(1, os.path.join(sys.path[0], '../../..'))
 from common_tools import cache_model_as, cache_output_as, easy_download, plot
 
 
@@ -95,7 +95,7 @@ x_train, y_train, x_val, y_val, maxlen, training_samples, validation_samples, ma
 #
 # get the glove data
 #
-glove_data = "glove.nosync.6B"
+glove_data = "../glove.nosync.6B"
 if not exists(join(dirname(__file__), glove_data)):
     easy_download(
         url="http://nlp.stanford.edu/data/glove.6B.zip",
@@ -112,61 +112,8 @@ for line in f:
     embeddings_index[word] = coefs
 f.close()
 
-print('Found %s word vectors.' % len(embeddings_index))
 
 
-# 
-# Create the embedding layer
-# 
-def add_pre_trained_embedding(model):
-    global embeddings_index, max_words, maxlen
-    embedding_dim = 100
-    embedding_matrix = np.zeros((max_words, embedding_dim))
-    for word, i in word_index.items():
-        embedding_vector = embeddings_index.get(word)
-        if i < max_words:
-            if embedding_vector is not None:
-                # Words not found in embedding index will be all-zeros.
-                embedding_matrix[i] = embedding_vector
-    model.add(Embedding(max_words, embedding_dim, input_length=maxlen))
-    model.layers[-1].set_weights([embedding_matrix])
-
-# 
-# create model with fixed pretrained embedding
-# 
-@cache_model_as("a4-train_and_eval3")
-def train_and_eval3(max_words, maxlen):
-    from keras.models import Sequential
-    from keras.layers import Embedding, Flatten, Dense
-
-    model = Sequential()
-    
-    add_pre_trained_embedding(model)
-    model.layers[0].trainable = False
-    model.add(Flatten())
-    model.add(Dense(32, activation='relu'))
-    model.add(Dense(1, activation='sigmoid'))
-    
-    model.summary()
-    model.compile(
-        optimizer='rmsprop', loss='binary_crossentropy', metrics=['acc']
-    )
-    history = model.fit(
-        x_train,
-        y_train,
-        epochs=10,
-        batch_size=32,
-        validation_data=(x_val, y_val)
-    )
-    model.save_weights('pre_trained_glove_model.h5')
-    return model, history
-
-
-model, history = train_and_eval3(
-    max_words, maxlen
-)
-
-#
-# plot
-#
-plot(history)
+def get_vector_for(word):
+    global embeddings_index
+    return embeddings_index.get(word)

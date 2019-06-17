@@ -127,7 +127,7 @@ def add_pre_trained_embedding(model):
         if i < max_words:
             if embedding_vector is not None:
                 # Words not found in embedding index will be all-zeros.
-                embedding_matrix[i] = embedding_vector
+                embedding_matrix[i] = embedding_vector  
     model.add(Embedding(max_words, embedding_dim, input_length=maxlen))
     model.layers[-1].set_weights([embedding_matrix])
 

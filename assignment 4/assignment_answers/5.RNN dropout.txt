@@ -1,0 +1,2 @@
+What is the proper way to use dropout in an RNN?
+    The proper way is to create a dropout mask that stays constant throughout each timestep, and also have temporally constant dropout mask for the internal recurrent connections.

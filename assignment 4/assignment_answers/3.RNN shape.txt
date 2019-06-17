@@ -1,0 +1,23 @@
+For the network with an embedding layer, a Simple RNN layer and a fully-connected layer 
+Each layer outputs a tensor of a certain shape.
+What are their shapes during training?
+Why are they this way?
+    The layers are:
+        Layer (type)                 Output Shape              Param #   
+        =================================================================
+        embedding_1 (Embedding)      (None, None, 32)          320000    
+        simple_rnn_1 (SimpleRNN)     (None, 32)                2080      
+        dense_1 (Dense)              (None, 1)                 33        
+    The embedding layer outputs a 3D tensor because the keras simple RNN needs:
+        - A dimension for batch size. In this case it would be 128.
+        - A dimension for time step. In this case 500, corrisponds to the number of 
+        words in a particular review.
+        - And a dimension for the number of features per word. In this case, is 32.
+    
+    The simple_rnn can be run in two modes, and in this case it is being run in 
+    the non-return_sequence mode. This means it is only returning the last output of 
+    the sequence, which is a vector of size 32, and since it is doing this for each of 
+    128 samples in the batch, it results in a tensor of (128, 32).
+    
+    The final layer is just a dimension for each sample in the batch, 
+    and then one value for the binary classification of that sample.
