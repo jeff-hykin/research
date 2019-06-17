@@ -31,7 +31,7 @@ print('input_test shape:', input_test.shape)
 from keras.layers import Dense
 
 model = Sequential()
-model.add(Embedding(max_features, 32))
+model.add(Embedding(input_dim=max_features, output_dim=32, input_length=maxlen))
 model.add(SimpleRNN(32))
 model.add(Dense(1, activation='sigmoid'))
 model.summary()

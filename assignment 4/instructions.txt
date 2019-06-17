@@ -1,7 +1,7 @@
-Embedding layer
+[DONE] Embedding layer
     code
     screenshot
-Word2Vec
+[DONE] Word2Vec
     glove
     word2vec
 
@@ -11,6 +11,16 @@ and a fully-connected layer
     Each layer outputs a tensor of a certain shape.
     What are their shapes during training?
     Why are they this way?
+        The layer are:
+            Layer (type)                 Output Shape              Param #   
+            =================================================================
+            embedding_1 (Embedding)      (None, None, 32)          320000    
+            simple_rnn_1 (SimpleRNN)     (None, 32)                2080      
+            dense_1 (Dense)              (None, 1)                 33        
+        The embedding layer outputs a 3D tensor because the keras simple RNN needs:
+            - a dimension for batch size (32)
+            - a dimension for time step (variable, corrisponds to the number of words in a particular review) 
+            - and a dimension for the number of features (number of dimensions per word, which in this case is also 32?)
 
 an embedding layer
 an LSTM layer
