@@ -5,7 +5,7 @@ ENV DEBIAN_FRONTEND noninteractive
 RUN apt-get install -y --no-install-recommends apt-utils
 RUN apt-get install -y ffmpeg
 RUN apt-get install opencv-data 
-RUN apt-get install libopencv-dev 
+# RUN apt-get install libopencv-dev 
 RUN apt-get install -y build-essential cmake pkg-config \
                     libjpeg8-dev libtiff5-dev libjasper-dev libpng12-dev \
                     libavcodec-dev libavformat-dev libswscale-dev libv4l-dev \
