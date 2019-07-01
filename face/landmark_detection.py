@@ -89,6 +89,7 @@ for f in glob.glob(os.path.join(faces_folder_path, "*.jpg")):
         # Get the landmarks/parts for the face in box d.
         shape = predictor(img, d)
         print(f"Part 0: {shape.part(0)}, Part 1: {shape.part(1)} ...")
+        print(shape)
         # Draw the face landmarks on the screen.
         win.add_overlay(shape)
 
