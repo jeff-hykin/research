@@ -68,7 +68,10 @@ detector  = dlib.get_frontal_face_detector()
 predictor = dlib.shape_predictor(predictor_path)
 win       = dlib.image_window()
 
+print('win = ', win)
+
 for f in glob.glob(os.path.join(faces_folder_path, "**/*.jpg")):
+    print('f = ', f)
     print("Processing file: {}".format(f))
     img = dlib.load_rgb_image(f)
 
@@ -81,6 +84,7 @@ for f in glob.glob(os.path.join(faces_folder_path, "**/*.jpg")):
     dets = detector(img, 1)
     print(f"Number of faces detected: {len(dets)}")
     for k, d in enumerate(dets):
+        print('k, d = ', k, d)
         print(f"Detection {k}: Left: {d.left()} Top: {d.top()} Right: {d.right()} Bottom: {d.bottom()}")
         # Get the landmarks/parts for the face in box d.
         shape = predictor(img, d)
