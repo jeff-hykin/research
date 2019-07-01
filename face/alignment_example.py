@@ -19,7 +19,8 @@
 #   Also note that this example requires Numpy which can be installed
 #   via the command:
 #       pip install numpy
-
+from os.path import isabs, isfile, isdir, join, dirname, basename, exists, splitext
+from os import remove, getcwd, makedirs, listdir, rename, rmdir
 import sys
 import dlib
 
