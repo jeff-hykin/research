@@ -60,12 +60,12 @@ class Face():
         min_y = max(self.chin_curve_bounds[3], self.left_eyebrow_bounds[3], self.right_eyebrow_bounds[3], self.nose_bounds[3], self.left_eye_bounds[3], self.right_eye_bounds[3], self.mouth_bounds[3])
         self.bounds = ( max_x, max_y, min_x, min_y )
     
-    def bounded_by(self, bounds):
-        x_max = bounds[0]
-        y_max = bounds[1]
-        x_min = bounds[2]
-        y_min = bounds[3]
-        return self.img[x_min:x_max, y_min:y_max]
+    def bounded_by(self, bounds, padding):
+        x_max = bounds[0] + padding
+        y_max = bounds[1] + padding
+        x_min = bounds[2] - padding
+        y_min = bounds[3] - padding
+        return self.img[ y_min:y_max, x_min:x_max]
     
     #
     # Facial parts
@@ -109,22 +109,22 @@ class Face():
     #
     # Save options
     #
-    def save_to(self, image_path):
-        dlib.save_image(self.bounded_by(self.bounds), image_path)
-    def save_chin_curve_to(self, image_path):
-        dlib.save_image(self.bounded_by(self.chin_curve_bounds), image_path)
-    def save_left_eyebrow_to(self, image_path):
-        dlib.save_image(self.bounded_by(self.left_eyebrow_bounds), image_path)
-    def save_right_eyebrow_to(self, image_path):
-        dlib.save_image(self.bounded_by(self.right_eyebrow_bounds), image_path)
-    def save_nose_to(self, image_path):
-        dlib.save_image(self.bounded_by(self.nose_bounds), image_path)
-    def save_left_eye_to(self, image_path):
-        dlib.save_image(self.bounded_by(self.left_eye_bounds), image_path)
-    def save_right_eye_to(self, image_path):
-        dlib.save_image(self.bounded_by(self.right_eye_bounds), image_path)
-    def save_mouth_to(self, image_path):
-        dlib.save_image(self.bounded_by(self.mouth_bounds), image_path)
+    def save_to(self, image_path, padding):
+        dlib.save_image(self.bounded_by(self.bounds, padding), image_path)
+    def save_chin_curve_to(self, image_path, padding):
+        dlib.save_image(self.bounded_by(self.chin_curve_bounds, padding), image_path)
+    def save_left_eyebrow_to(self, image_path, padding):
+        dlib.save_image(self.bounded_by(self.left_eyebrow_bounds, padding), image_path)
+    def save_right_eyebrow_to(self, image_path, padding):
+        dlib.save_image(self.bounded_by(self.right_eyebrow_bounds, padding), image_path)
+    def save_nose_to(self, image_path, padding):
+        dlib.save_image(self.bounded_by(self.nose_bounds, padding), image_path)
+    def save_left_eye_to(self, image_path, padding):
+        dlib.save_image(self.bounded_by(self.left_eye_bounds, padding), image_path)
+    def save_right_eye_to(self, image_path, padding):
+        dlib.save_image(self.bounded_by(self.right_eye_bounds, padding), image_path)
+    def save_mouth_to(self, image_path, padding):
+        dlib.save_image(self.bounded_by(self.mouth_bounds, padding), image_path)
 
 
 def faces_for(img):
@@ -208,5 +208,5 @@ def test_example(jpg_image_path):
     return faces
 
 faces = test_example("./face/faces/person.jpg")
-faces[0].save_to("./face/faces/cropped.jpeg")
+faces[0].save_left_eye_to("./face/faces/cropped.jpeg", padding=30)
 print("done")
