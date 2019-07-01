@@ -35,8 +35,9 @@ def bounding_box(array_of_points):
     return max_x, max_y, min_x, min_y
 
 class Face():
-    def __init__(self, shape):
+    def __init__(self, shape, img):
         global nuber_of_face_features
+        self.img = img
         # create the empty array
         self.as_array = np.empty((nuber_of_face_features, 2), dtype=np.int32)
         # store the face as an array
@@ -58,10 +59,11 @@ class Face():
         min_x = max(self.chin_curve_bounds[2], self.left_eyebrow_bounds[2], self.right_eyebrow_bounds[2], self.nose_bounds[2], self.left_eye_bounds[2], self.right_eye_bounds[2], self.mouth_bounds[2])
         min_y = max(self.chin_curve_bounds[3], self.left_eyebrow_bounds[3], self.right_eyebrow_bounds[3], self.nose_bounds[3], self.left_eye_bounds[3], self.right_eye_bounds[3], self.mouth_bounds[3])
         self.bounds = ( max_x, max_y, min_x, min_y )
-    
-    # 
+
+    #
     # Facial parts
     #
+    # see: https://miro.medium.com/max/828/1*96UT-D8uSXjlnyvs9DZTog.png
     def chin_curve(self):
         return self.as_array[0:16]
     def left_eyebrow(self):
@@ -96,11 +98,68 @@ class Face():
         return bounds_to_points(*self.right_eye_bounds)
     def mouth_bounding_box(self):
         return bounds_to_points(*self.mouth_bounds)
+    
+    #
+    # Save options
+    #
+    def save_to(self, image_path):
+        dlib.save_jpeg(self.img, image_path)
+
+    def save_chin_curve_to(self, image_path):
+        x_max = self.chin_curve_bounding_box[0]
+        y_max = self.chin_curve_bounding_box[1]
+        x_min = self.chin_curve_bounding_box[2]
+        y_min = self.chin_curve_bounding_box[3]
+        dlib.save_jpeg(self.img[x_min:x_max, y_min:y_max], image_path)
+    
+    def save_left_eyebrow_to(self, image_path):
+        x_max = self.left_eyebrow_bounding_box[0]
+        y_max = self.left_eyebrow_bounding_box[1]
+        x_min = self.left_eyebrow_bounding_box[2]
+        y_min = self.left_eyebrow_bounding_box[3]
+        dlib.save_jpeg(self.img[x_min:x_max, y_min:y_max], image_path)
+    
+    def save_right_eyebrow_to(self, image_path):
+        x_max = self.right_eyebrow_bounding_box[0]
+        y_max = self.right_eyebrow_bounding_box[1]
+        x_min = self.right_eyebrow_bounding_box[2]
+        y_min = self.right_eyebrow_bounding_box[3]
+        dlib.save_jpeg(self.img[x_min:x_max, y_min:y_max], image_path)
+    
+    def save_nose_to(self, image_path):
+        x_max = self.nose_bounding_box[0]
+        y_max = self.nose_bounding_box[1]
+        x_min = self.nose_bounding_box[2]
+        y_min = self.nose_bounding_box[3]
+        dlib.save_jpeg(self.img[x_min:x_max, y_min:y_max], image_path)
+    
+    def save_left_eye_to(self, image_path):
+        x_max = self.left_eye_bounding_box[0]
+        y_max = self.left_eye_bounding_box[1]
+        x_min = self.left_eye_bounding_box[2]
+        y_min = self.left_eye_bounding_box[3]
+        dlib.save_jpeg(self.img[x_min:x_max, y_min:y_max], image_path)
+    
+    def save_right_eye_to(self, image_path):
+        x_max = self.right_eye_bounding_box[0]
+        y_max = self.right_eye_bounding_box[1]
+        x_min = self.right_eye_bounding_box[2]
+        y_min = self.right_eye_bounding_box[3]
+        dlib.save_jpeg(self.img[x_min:x_max, y_min:y_max], image_path)
+    
+    def save_mouth_to(self, image_path):
+        x_max = self.mouth_bounding_box[0]
+        y_max = self.mouth_bounding_box[1]
+        x_min = self.mouth_bounding_box[2]
+        y_min = self.mouth_bounding_box[3]
+        dlib.save_jpeg(self.img[x_min:x_max, y_min:y_max], image_path)
+    
+
 
 def faces_for(img):
     global detector
     global predictor
-    
+
     # Ask the detector to find the bounding boxes of each face. The 1 in the
     # second argument indicates that we should upsample the image 1 time. This
     # will make everything bigger and allow us to detect more faces.
@@ -108,8 +167,8 @@ def faces_for(img):
     # initialize by the number of faces
     faces = [None]*len(dets)
     for index, d in enumerate(dets):
-        faces[index] = Face(predictor(img, d))
-    
+        faces[index] = Face(predictor(img, d), img)
+
     return faces
 
 def aligned_faces_for(img):
@@ -123,7 +182,7 @@ def aligned_faces_for(img):
         # initialize by the number of faces
         faces = [None]*len(dets)
         for d in dets:
-            faces[each_index] = Face(predictor(each_img, d))
+            faces[each_index] = Face(predictor(each_img, d), img)
     return faces
 
 
@@ -144,7 +203,7 @@ def get_aligned_face_images(img, size=320, padding=0.25):
     faces = dlib.full_object_detections()
     for detection in dets:
         faces.append(predictor(img, detection))
-    
+
     # returns a list of images
     return dlib.get_face_chips(img, faces, size=size, padding=padding)
 
@@ -152,29 +211,29 @@ def get_aligned_face_images(img, size=320, padding=0.25):
 def vector_points_for(jpg_image_path):
     global detector
     global predictor
-    
+
     # load up the image
     img = dlib.load_rgb_image(jpg_image_path)
-    
+
     # Ask the detector to find the bounding boxes of each face. The 1 in the
     # second argument indicates that we should upsample the image 1 time. This
     # will make everything bigger and allow us to detect more faces.
     dets = detector(img, 1)
-    
+
     # initialize by the number of faces
     faces = [None]*len(dets)
     for index, d in enumerate(dets):
         shape = predictor(img, d)
         # copy over all 68 facial features/vertexs/points
         faces[index] = [ shape.part(each_part_index) for each_part_index in range(shape.num_parts) ]
-    
+
     return faces
 
 def test_example(jpg_image_path):
     # load up the image
     img = dlib.load_rgb_image(jpg_image_path)
     faces = faces_for(img)
-    
+
     return faces
 
 
