@@ -231,9 +231,10 @@ def vector_points_for(jpg_image_path):
 def test_example(jpg_image_path):
     # load up the image
     img = dlib.load_rgb_image(jpg_image_path)
-    faces = faces_for(img)
+    faces = aligned_faces_for(img)
 
     return faces
 
 faces = test_example("./face/faces/person.jpg")
+faces[0].save_to("./face/faces/cropped.jpeg")
 print("done")
