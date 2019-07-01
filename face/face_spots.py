@@ -212,5 +212,5 @@ def test_example(jpg_image_path):
     return faces
 
 faces = test_example("./face/faces/person.jpg")
-faces[0].save_left_eye_to("./face/faces/cropped.jpeg", padding=30)
+faces[0].save_left_eye_to("./face/faces/cropped.nosync.jpeg", padding=30)
 print("done")
