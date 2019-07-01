@@ -67,7 +67,7 @@ class Face():
         y_max = bounds[1] + int(padding * height)
         x_min = bounds[2] - int(padding * height)
         y_min = bounds[3] - int(padding * height)
-        print([y_min:y_max, x_min:x_max])
+        print(self.img[ y_min:y_max, x_min:x_max].shape)
         print("\n\n")
         return self.img[ y_min:y_max, x_min:x_max]
     
