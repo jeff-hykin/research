@@ -142,8 +142,8 @@ def faces_for(img):
 
     return faces
 
-def aligned_faces_for(img):
-    images = get_aligned_face_images(img)
+def aligned_faces_for(img, size=320, padding=0.25):
+    images = get_aligned_face_images(img, size, padding)
     faces = [None]*len(images)
     for each_index, each_img in enumerate(images):
         # Ask the detector to find the bounding boxes of each face. The 1 in the
@@ -203,7 +203,7 @@ def vector_points_for(jpg_image_path):
 def test_example(jpg_image_path):
     # load up the image
     img = dlib.load_rgb_image(jpg_image_path)
-    faces = aligned_faces_for(img)
+    faces = aligned_faces_for(img, size=800, padding=0.25)
 
     return faces
 
