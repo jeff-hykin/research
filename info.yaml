@@ -24,11 +24,13 @@
             git pull; python3 assignment\ 4/assignment_answers/6.1D\ CNN/code.py
         face-build:
             git pull; cd face; docker build -t colemurray/medium-facenet-tutorial -f dockerfile .
+        face-test:
+            git pull; python3 landmark_detection.py shape_predictor_68_face_landmarks.dat ./faces
             
             
     dependencies: &dependencies
         docker: 18.09.2
-        
+        cmake: 3.13.4 # needed for pip dlib
         atk: 0.0.1
         python3: 3.7.3
         gunzip: 1.9.0
