@@ -111,20 +111,28 @@ class Face():
     # Save options
     #
     def save_to(self, image_path, padding):
+        """padding is a percentage of the height"""
         dlib.save_image(self.bounded_by(self.bounds, padding), image_path)
     def save_chin_curve_to(self, image_path, padding):
+        """padding is a percentage of the height"""
         dlib.save_image(self.bounded_by(self.chin_curve_bounds, padding), image_path)
     def save_left_eyebrow_to(self, image_path, padding):
+        """padding is a percentage of the height"""
         dlib.save_image(self.bounded_by(self.left_eyebrow_bounds, padding), image_path)
     def save_right_eyebrow_to(self, image_path, padding):
+        """padding is a percentage of the height"""
         dlib.save_image(self.bounded_by(self.right_eyebrow_bounds, padding), image_path)
     def save_nose_to(self, image_path, padding):
+        """padding is a percentage of the height"""
         dlib.save_image(self.bounded_by(self.nose_bounds, padding), image_path)
     def save_left_eye_to(self, image_path, padding):
+        """padding is a percentage of the height"""
         dlib.save_image(self.bounded_by(self.left_eye_bounds, padding), image_path)
     def save_right_eye_to(self, image_path, padding):
+        """padding is a percentage of the height"""
         dlib.save_image(self.bounded_by(self.right_eye_bounds, padding), image_path)
     def save_mouth_to(self, image_path, padding):
+        """padding is a percentage of the height"""
         dlib.save_image(self.bounded_by(self.mouth_bounds, padding), image_path)
 
 
@@ -201,13 +209,15 @@ def vector_points_for(jpg_image_path):
 
     return faces
 
-def test_example(jpg_image_path):
+def test_example():
     # load up the image
-    img = dlib.load_rgb_image(jpg_image_path)
+    img = dlib.load_rgb_image("./face/faces/person.jpg")
     faces = aligned_faces_for(img, size=800, padding=0.25)
 
+    faces[0].save_left_eye_to("./face/faces/left_eye.nosync.jpeg", padding=0.05)
+    faces[0].save_to("./face/faces/face.nosync.jpeg", padding=0.05)
+    
     return faces
 
-faces = test_example("./face/faces/person.jpg")
-faces[0].save_left_eye_to("./face/faces/cropped.nosync.jpeg", padding=0.05)
+faces = test_example()
 print("done")
