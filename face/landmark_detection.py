@@ -1,4 +1,3 @@
-#!/usr/bin/python
 # The contents of this file are in the public domain. See LICENSE_FOR_EXAMPLE_PROGRAMS.txt
 #
 #   This example program shows how to find frontal human faces in an image and
@@ -90,6 +89,7 @@ for f in glob.glob(os.path.join(faces_folder_path, "*.jpg")):
         shape = predictor(img, d)
         print(f"Part 0: {shape.part(0)}, Part 1: {shape.part(1)} ...")
         print(shape)
+        
         # Draw the face landmarks on the screen.
         win.add_overlay(shape)
 
