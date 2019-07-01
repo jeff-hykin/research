@@ -1,4 +1,4 @@
-FROM tensorflow/tensorflow:latest
+FROM tensorflow/tensorflow:1.1.0
 
 RUN apt-get update -y --fix-missing
 RUN apt-get install -y ffmpeg
