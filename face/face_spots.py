@@ -8,7 +8,7 @@ import dlib
 import glob
 
 detector  = dlib.get_frontal_face_detector()
-predictor = dlib.shape_predictor("./shape_predictor_68_face_landmarks.dat")
+predictor = dlib.shape_predictor( join(dirname(__file__), "./shape_predictor_68_face_landmarks.dat") )
 
 def vector_points_for(jpg_image_path):
     global detector
