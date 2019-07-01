@@ -65,10 +65,10 @@ class Face():
         width = self.img.shape[1]
         print('width = ', width)
         print('height = ', height)
-        x_max = bounds[0] + padding * width
-        y_max = bounds[1] + padding * height
-        x_min = bounds[2] - padding * width
-        y_min = bounds[3] - padding * height
+        x_max = bounds[0] + int(padding * width)
+        y_max = bounds[1] + int(padding * height)
+        x_min = bounds[2] - int(padding * width)
+        y_min = bounds[3] - int(padding * height)
         return self.img[ y_min:y_max, x_min:x_max]
     
     #
