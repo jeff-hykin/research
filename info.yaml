@@ -25,7 +25,7 @@
         face-build:
             git pull; cd face; docker build -t colemurray/medium-facenet-tutorial -f dockerfile .
         face-test:
-            git pull; python3 landmark_detection.py shape_predictor_68_face_landmarks.dat ./faces
+            git pull; cd face; python3 landmark_detection.py shape_predictor_68_face_landmarks.dat ./faces
             
             
     dependencies: &dependencies
