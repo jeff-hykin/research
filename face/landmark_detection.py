@@ -70,7 +70,7 @@ win       = dlib.image_window()
 
 print('win = ', win)
 
-for f in glob.glob(os.path.join(faces_folder_path, "**", "*.jpg")):
+for f in glob.glob(os.path.join(faces_folder_path, "*.jpg")):
     print('f = ', f)
     print("Processing file: {}".format(f))
     img = dlib.load_rgb_image(f)
