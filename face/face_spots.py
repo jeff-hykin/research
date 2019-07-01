@@ -59,7 +59,6 @@ class Face():
         min_x = min(self.chin_curve_bounds[2], self.left_eyebrow_bounds[2], self.right_eyebrow_bounds[2], self.nose_bounds[2], self.left_eye_bounds[2], self.right_eye_bounds[2], self.mouth_bounds[2])
         min_y = min(self.chin_curve_bounds[3], self.left_eyebrow_bounds[3], self.right_eyebrow_bounds[3], self.nose_bounds[3], self.left_eye_bounds[3], self.right_eye_bounds[3], self.mouth_bounds[3])
         self.bounds = ( max_x, max_y, min_x, min_y )
-        print('self.bounds = ', self.bounds)
     
     def bounded_by(self, bounds, padding):
         height = self.img.shape[0]
@@ -72,10 +71,6 @@ class Face():
             x_min = 0
         if y_min < 0:
             y_min = 0
-        print("bounded shape")
-        print(((y_min,y_max), (x_min,x_max)))
-        print(self.img[ y_min:y_max, x_min:x_max].shape)
-        print("\n\n")
         return self.img[ y_min:y_max, x_min:x_max]
     
     #
