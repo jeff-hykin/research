@@ -28,3 +28,5 @@ def vector_points_for(jpg_image_path):
         shape = predictor(img, d)
         # copy over all 68 facial features/vertexs/points
         faces[index] = [ shape.part(each_part_index) for each_part_index in range(shape.num_parts) ]
+    
+    return faces
