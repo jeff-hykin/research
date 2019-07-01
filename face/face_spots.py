@@ -30,3 +30,4 @@ def vector_points_for(jpg_image_path):
         faces[index] = [ shape.part(each_part_index) for each_part_index in range(shape.num_parts) ]
     
     return faces
+
