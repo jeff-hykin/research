@@ -2,7 +2,6 @@ import sys
 import os
 from os.path import isabs, isfile, isdir, join, dirname, basename, exists, splitext
 from os import remove, getcwd, makedirs, listdir, rename, rmdir
-from common_tools import download
 from shutil import move
 import dlib
 import glob
