@@ -72,6 +72,8 @@ class Face():
             x_min = 0
         if y_min > 0:
             y_min = 0
+        print("bounded shape")
+        print(((y_min,y_max), (x_min,x_max)))
         print(self.img[ y_min:y_max, x_min:x_max].shape)
         print("\n\n")
         return self.img[ y_min:y_max, x_min:x_max]
