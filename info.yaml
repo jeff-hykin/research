@@ -27,11 +27,13 @@
             
             
     dependencies: &dependencies
-        docker: 
+        docker: 18.09.2
+        
         atk: 0.0.1
         python3: 3.7.3
         gunzip: 1.9.0
         {pip3: 19.0.3}:
+            dlib: 19.17.0
             requests: 2.22.0
             keras: 2.2.4
             numpy: 1.16.1
