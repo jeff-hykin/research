@@ -47,6 +47,8 @@
             h5py: 2.9.0 # for saving and loading keras models
             regex: 2019.6.5
         libomp: 8.0.0 # for pytorch
+        curl: 7.54.0
+        bzip2: 1.0.6
     
     (advanced_setup):
         (put_new_dependencies_under): [ '(project)', 'dependencies' ]
