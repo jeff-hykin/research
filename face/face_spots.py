@@ -103,55 +103,55 @@ class Face():
     # Save options
     #
     def save_to(self, image_path):
-        dlib.save_jpeg(self.img, image_path)
+        dlib.save_image(self.img, image_path)
     def save_chin_curve_to(self, image_path):
         x_max = self.chin_curve_bounds[0]
         y_max = self.chin_curve_bounds[1]
         x_min = self.chin_curve_bounds[2]
         y_min = self.chin_curve_bounds[3]
-        dlib.save_jpeg(self.img[x_min:x_max, y_min:y_max], image_path)
+        dlib.save_image(self.img[x_min:x_max, y_min:y_max], image_path)
     
     def save_left_eyebrow_to(self, image_path):
         x_max = self.left_eyebrow_bounds[0]
         y_max = self.left_eyebrow_bounds[1]
         x_min = self.left_eyebrow_bounds[2]
         y_min = self.left_eyebrow_bounds[3]
-        dlib.save_jpeg(self.img[x_min:x_max, y_min:y_max], image_path)
+        dlib.save_image(self.img[x_min:x_max, y_min:y_max], image_path)
     
     def save_right_eyebrow_to(self, image_path):
         x_max = self.right_eyebrow_bounds[0]
         y_max = self.right_eyebrow_bounds[1]
         x_min = self.right_eyebrow_bounds[2]
         y_min = self.right_eyebrow_bounds[3]
-        dlib.save_jpeg(self.img[x_min:x_max, y_min:y_max], image_path)
+        dlib.save_image(self.img[x_min:x_max, y_min:y_max], image_path)
     
     def save_nose_to(self, image_path):
         x_max = self.nose_bounds[0]
         y_max = self.nose_bounds[1]
         x_min = self.nose_bounds[2]
         y_min = self.nose_bounds[3]
-        dlib.save_jpeg(self.img[x_min:x_max, y_min:y_max], image_path)
+        dlib.save_image(self.img[x_min:x_max, y_min:y_max], image_path)
     
     def save_left_eye_to(self, image_path):
         x_max = self.left_eye_bounds[0]
         y_max = self.left_eye_bounds[1]
         x_min = self.left_eye_bounds[2]
         y_min = self.left_eye_bounds[3]
-        dlib.save_jpeg(self.img[x_min:x_max, y_min:y_max], image_path)
+        dlib.save_image(self.img[x_min:x_max, y_min:y_max], image_path)
     
     def save_right_eye_to(self, image_path):
         x_max = self.right_eye_bounds[0]
         y_max = self.right_eye_bounds[1]
         x_min = self.right_eye_bounds[2]
         y_min = self.right_eye_bounds[3]
-        dlib.save_jpeg(self.img[x_min:x_max, y_min:y_max], image_path)
+        dlib.save_image(self.img[x_min:x_max, y_min:y_max], image_path)
     
     def save_mouth_to(self, image_path):
         x_max = self.mouth_bounds[0]
         y_max = self.mouth_bounds[1]
         x_min = self.mouth_bounds[2]
         y_min = self.mouth_bounds[3]
-        dlib.save_jpeg(self.img[x_min:x_max, y_min:y_max], image_path)
+        dlib.save_image(self.img[x_min:x_max, y_min:y_max], image_path)
     
 
 
