@@ -63,10 +63,10 @@ class Face():
     
     def bounded_by(self, bounds, padding):
         height = self.img.shape[0]
-        x_max = bounds[0] + int(padding * height)
-        y_max = bounds[1] + int(padding * height)
-        x_min = bounds[2] - int(padding * height)
-        y_min = bounds[3] - int(padding * height)
+        x_max = abs( bounds[0] + int(padding * height) )
+        y_max = abs( bounds[1] + int(padding * height) )
+        x_min = abs( bounds[2] - int(padding * height) )
+        y_min = abs( bounds[3] - int(padding * height) )
         print(self.img[ y_min:y_max, x_min:x_max].shape)
         print("\n\n")
         return self.img[ y_min:y_max, x_min:x_max]
