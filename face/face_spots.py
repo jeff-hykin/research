@@ -68,9 +68,9 @@ class Face():
         x_min = bounds[2] - int(padding * height)
         y_min = bounds[3] - int(padding * height)
         # dont let the indices go negative
-        if x_min > 0:
+        if x_min < 0:
             x_min = 0
-        if y_min > 0:
+        if y_min < 0:
             y_min = 0
         print("bounded shape")
         print(((y_min,y_max), (x_min,x_max)))
