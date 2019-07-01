@@ -176,3 +176,6 @@ def test_example(jpg_image_path):
     faces = faces_for(img)
     
     return faces
+
+
+print("done")
