@@ -6,28 +6,28 @@
 source: [https://github.com/dunovank/jupyter-themes](https://github.com/dunovank/jupyter-themes)
 the command can be customized
 jt  [-h] [-l]
-   [-t THEME]
-   [-f MONOFONT]
-   [-fs MONOSIZE]
-   [-nf NBFONT]
-   [-nfs NBFONTSIZE]
-   [-tf TCFONT]
-   [-tfs TCFONTSIZE]
-   [-dfs DFFONTSIZE]
-   [-m MARGINS]
-   [-cursw CURSORWIDTH]
-   [-cursc CURSORCOLOR]
-   [-vim]
-   [-cellw CELLWIDTH]
-   [-lineh LINEHEIGHT]
-   [-altp]
-   [-altmd]
-   [-altout]
-   [-P]
-   [-T]
-   [-N]
-   [-r]
-   [-dfonts] 
+   [-t THEME]<br>
+   [-f MONOFONT]<br>
+   [-fs MONOSIZE]<br>
+   [-nf NBFONT]<br>
+   [-nfs NBFONTSIZE]<br>
+   [-tf TCFONT]<br>
+   [-tfs TCFONTSIZE]<br>
+   [-dfs DFFONTSIZE]<br>
+   [-m MARGINS]<br>
+   [-cursw CURSORWIDTH]<br>
+   [-cursc CURSORCOLOR]<br>
+   [-vim]<br>
+   [-cellw CELLWIDTH]<br>
+   [-lineh LINEHEIGHT]<br>
+   [-altp]<br>
+   [-altmd]<br>
+   [-altout]<br>
+   [-P]<br>
+   [-T]<br>
+   [-N]<br>
+   [-r]<br>
+   [-dfonts]<br>
 
 3. Restart your notebook server
 `python3 -m notebook`
