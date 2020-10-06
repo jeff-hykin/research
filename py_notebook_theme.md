@@ -29,8 +29,8 @@ jt  [-h] [-l]<br>
    [-r]<br>
    [-dfonts]<br>
 
-3. Restart your notebook server
-`python3 -m notebook`
+3. Restart your notebook server<br>
+`python3 -m notebook`<br>
 Refresh the webpage
 
 1. The normal browser print messes everything up <br>
