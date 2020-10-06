@@ -2,10 +2,10 @@
 `pip install jupyterthemes`
 
 1. Set the theme by the running command
-`jt -t onedork -fs 95 -altp -tfs 11 -nfs 115 -cellw 88% -T`
-source: [https://github.com/dunovank/jupyter-themes](https://github.com/dunovank/jupyter-themes)
-the command can be customized
-jt  [-h] [-l]
+`jt -t onedork -fs 95 -altp -tfs 11 -nfs 115 -cellw 88% -T` <br>
+source: [https://github.com/dunovank/jupyter-themes](https://github.com/dunovank/jupyter-themes)<br>
+the command can be customized<br>
+jt  [-h] [-l]<br>
    [-t THEME]<br>
    [-f MONOFONT]<br>
    [-fs MONOSIZE]<br>
